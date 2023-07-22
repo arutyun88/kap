@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.5
+  get: 4.6.5
   auto_route: ^7.7.1
 
 dev_dependencies:

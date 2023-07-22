@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:kap/services/settings_service.dart';
 
 @RoutePage()
 class SecondView extends StatelessWidget {
@@ -11,7 +12,7 @@ class SecondView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(context.topRoute.name)),
-      body: const Placeholder(),
+      body: Center(child: Text(SettingsService.environment.name)),
     );
   }
 }
