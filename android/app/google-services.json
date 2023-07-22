@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "711470569320",
+    "project_id": "kap-kayk",
+    "storage_bucket": "kap-kayk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:711470569320:android:5ab647197d152e513268dd",
+        "android_client_info": {
+          "package_name": "com.kap.kap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "711470569320-smmdoh2kkof1819v0h8l0q16l0puj44i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDc5ATxhwaPmwkxkjSVmY7KvYb08XUk1r4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "711470569320-smmdoh2kkof1819v0h8l0q16l0puj44i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "711470569320-p67aeqv4q00bs6v84rlkra1he49arukm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.kap.kap"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
