@@ -1,6 +1,10 @@
 {
   "@@locale": "en",
-  "language": "English",
+  "language": "english",
+  "feed": "feed",
+  "messages": "messages",
+  "settings": "settings",
+  "profile": "profile",
   "helloWithUsername": "Welcome, {username}.",
   "@helloWithUsername": {
     "placeholders": {

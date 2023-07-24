@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -11,6 +12,19 @@ import 'package:kap/services/firebase_service.dart';
 
 class LocalizationService extends GetxService {
   LocalizationService._(this.data, this.delegate);
+
+  final Map<String, Map<String, String>> data;
+  final List<LocalizationsDelegate> delegate;
+
+  static LocalizationService to = Get.find<LocalizationService>();
+
+  final _locale = const Locale('ru').obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _locale.value = _platformLocale();
+  }
 
   static Future<void> init() async {
     final env = EnvironmentService.to.environment;
@@ -33,9 +47,7 @@ class LocalizationService extends GetxService {
         if (value is Map<String, dynamic>) {
           Map<String, String> subMap = {};
           value.forEach((subKey, subValue) {
-            if (subValue is String) {
-              subMap[subKey] = subValue;
-            }
+            if (subValue is String) subMap[subKey] = subValue;
           });
           convertedMap[key] = subMap;
         }
@@ -45,9 +57,15 @@ class LocalizationService extends GetxService {
     return Get.lazyPut(() => LocalizationService._(convertedMap, delegate));
   }
 
-  final Map<String, Map<String, String>> data;
+  Locale get locale => _locale.value;
 
-  final List<LocalizationsDelegate> delegate;
+  void changeLocale(Locale? selectedLocale) {
+    if (selectedLocale == null || !AppLocalizations.delegate.isSupported(selectedLocale)) {
+      _locale.value = _platformLocale();
+    } else {
+      _locale.value = selectedLocale;
+    }
+  }
 
-  static LocalizationService to = Get.find<LocalizationService>();
+  Locale _platformLocale() => PlatformDispatcher.instance.locale;
 }

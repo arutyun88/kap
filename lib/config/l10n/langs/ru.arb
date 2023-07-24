@@ -1,5 +1,9 @@
 {
   "@@locale": "ru",
-  "language": "Русский",
+  "language": "русский",
+  "feed": "лента",
+  "messages": "сообщения",
+  "settings": "настройки",
+  "profile": "профиль",
   "helloWithUsername": "Добро пожаловать, {username}."
 }

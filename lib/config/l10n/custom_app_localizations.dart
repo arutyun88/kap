@@ -25,4 +25,16 @@ class CustomAppLocalizations extends AppLocalizations {
 
   @override
   String get language => _localizedStrings[localeName]?['language'] ?? _default.language;
+
+  @override
+  String get feed => _localizedStrings[localeName]?['feed'] ?? _default.language;
+
+  @override
+  String get messages => _localizedStrings[localeName]?['messages'] ?? _default.language;
+
+  @override
+  String get profile => _localizedStrings[localeName]?['profile'] ?? _default.language;
+
+  @override
+  String get settings => _localizedStrings[localeName]?['settings'] ?? _default.language;
 }

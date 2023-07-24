@@ -15,6 +15,7 @@ class FirstView extends StatelessWidget {
       appBar: AppBar(title: Text(context.topRoute.name)),
       body: Center(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             ElevatedButton(
               onPressed: () => AutoRouter.of(context).push(const SecondRoute()),
