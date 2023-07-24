@@ -1,0 +1,5 @@
+{
+  "@@locale": "ru",
+  "language": "Русский",
+  "helloWithUsername": "Добро пожаловать, {username}."
+}

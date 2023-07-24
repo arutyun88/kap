@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
-import 'package:kap/firebase_options.dart';
+import 'package:kap/config/firebase_options.dart';
 
 class FirebaseService extends GetxService {
   FirebaseService._(this.firebaseApp);

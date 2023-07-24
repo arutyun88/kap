@@ -1,0 +1,12 @@
+{
+  "@@locale": "en",
+  "language": "English",
+  "helloWithUsername": "Welcome, {username}.",
+  "@helloWithUsername": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      }
+    }
+  }
+}
