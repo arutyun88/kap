@@ -30,5 +30,7 @@
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:711470569320:ios:e85aa04e632512ee3268dd</string>
+	<key>DATABASE_URL</key>
+	<string>https://kap-kayk-default-rtdb.europe-west1.firebasedatabase.app</string>
 </dict>
 </plist>

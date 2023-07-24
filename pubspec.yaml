@@ -14,7 +14,8 @@ dependencies:
   get: 4.6.5
   auto_route: ^7.7.1
   firebase_core: ^2.15.0
-  cloud_firestore: ^4.8.3
+  firebase_database: ^10.2.4
+  package_info_plus: ^4.0.2
 
 dev_dependencies:
   flutter_test:
