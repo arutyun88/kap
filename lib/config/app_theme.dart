@@ -14,8 +14,8 @@ class AppTheme {
       );
 
   static ThemeData get dark => KitTheme.theme(
-        // fontFamily: 'Panchang',
-        fontFamily: 'Red Hat Display',
+        fontFamily: 'Panchang',
+        // fontFamily: 'Red Hat Display',
         fontMainColor: Palette.neutralPalette.text,
       ).copyWith(
         scaffoldBackgroundColor: Colors.black,

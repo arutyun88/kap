@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:kap/app/modules/my_app.dart';
@@ -17,12 +15,7 @@ void mainInit(Environment env) async {
 
 Future<void> _initServices({required Environment env}) async {
   await EnvironmentService.init(env);
-  // final path = Directory.current.path;
-  // final path = (await path_provider.getExternalStorageDirectory())?.path;
-  final path = (await path_provider.getApplicationDocumentsDirectory()).path;
-  // log(path);
-  log(path);
-  Hive.init(path);
+  Hive.init((await path_provider.getApplicationDocumentsDirectory()).path);
   await FirebaseService.init();
   await LocalizationService.init();
 }
