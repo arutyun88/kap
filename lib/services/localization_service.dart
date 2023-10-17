@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
@@ -30,10 +31,14 @@ class LocalizationService extends GetxService {
   }
 
   static Future<void> init() async {
-    await Hive.openBox(StorageKeys.settings);
+    final value = await Hive.openBox(StorageKeys.settings);
+    log(value.keys.toString());
+    log(value.values.toString());
 
     final env = EnvironmentService.to.environment;
     final appInfo = EnvironmentService.to.appInfo;
+    log(env.name.toString());
+    log(appInfo.toString());
     final fData = await _getData(env, appInfo);
     var delegate = [
       fData == null ? AppLocalizations.delegate : const AppLocalizationsCustomDelegate(),
@@ -41,7 +46,7 @@ class LocalizationService extends GetxService {
       GlobalCupertinoLocalizations.delegate,
       GlobalWidgetsLocalizations.delegate,
     ];
-    final convertedMap = await _setData(fData);
+    final convertedMap = await _setData(fData, env);
     return Get.lazyPut(() => LocalizationService._(convertedMap, delegate));
   }
 
@@ -64,7 +69,8 @@ class LocalizationService extends GetxService {
           (await FirebaseService.to.database.ref('$firebaseDataPath/${StorageKeys.version}').get()).value;
       final settings = Hive.box(StorageKeys.settings);
       final sVersion = settings.get(StorageKeys.localizationVersion);
-      if (sVersion == null || sVersion != localizationVersion) {
+      final scope = settings.get(StorageKeys.scope);
+      if (sVersion == null || sVersion != localizationVersion || scope == null || scope != env.name) {
         final data = (await FirebaseService.to.database.ref(firebaseDataPath).get()).value;
         if (data != null) return data;
       } else {
@@ -75,7 +81,7 @@ class LocalizationService extends GetxService {
     }
   }
 
-  static Future<Map<String, Map<String, String>>> _setData(dynamic data) async {
+  static Future<Map<String, Map<String, String>>> _setData(dynamic data, Environment env) async {
     Map<String, Map<String, String>> convertedMap = {};
     if (data != null) {
       jsonDecode(jsonEncode(data)).forEach((key, value) {
@@ -93,6 +99,7 @@ class LocalizationService extends GetxService {
         }
       });
     }
+    await Hive.box(StorageKeys.settings).put(StorageKeys.scope, env.name);
     await Hive.box(StorageKeys.settings).put(StorageKeys.localizations, convertedMap);
     return convertedMap;
   }

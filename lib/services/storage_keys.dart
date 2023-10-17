@@ -5,4 +5,5 @@ abstract class StorageKeys {
   static const String version = 'version';
   static const String localizations = 'localizations';
   static const String localizationVersion = 'localization_version';
+  static const String scope = 'scope';
 }
