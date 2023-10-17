@@ -7,7 +7,7 @@ class AppTheme {
         fontFamily: 'Red Hat Display',
         fontMainColor: Palette.main.primary.dark,
       ).copyWith(
-        scaffoldBackgroundColor: Colors.white,
+        scaffoldBackgroundColor: Palette.background.light,
         appBarTheme: const AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle.dark,
         ),
@@ -18,7 +18,7 @@ class AppTheme {
         // fontFamily: 'Red Hat Display',
         fontMainColor: Palette.main.secondary,
       ).copyWith(
-        scaffoldBackgroundColor: Colors.black,
+        scaffoldBackgroundColor: Palette.background.dark,
         appBarTheme: const AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle.light,
         ),
