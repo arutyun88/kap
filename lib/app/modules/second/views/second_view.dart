@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kap/config/l10n/custom_app_localizations.dart';
-import 'package:kap/services/settings_service.dart';
+import 'package:kap/services/localization_service.dart';
 
 @RoutePage()
 class SecondView extends StatelessWidget {
@@ -21,19 +21,19 @@ class SecondView extends StatelessWidget {
             children: [
               Text(context.dictionary.profile),
               ElevatedButton(
-                onPressed: SettingsService.localization.locale.languageCode != 'ru'
-                    ? () => SettingsService.localization.changeLocale(const Locale('ru'))
+                onPressed: LocalizationService.locale.languageCode != 'ru'
+                    ? () => LocalizationService.changeLocale(const Locale('ru'))
                     : null,
                 child: const Text('русский'),
               ),
               ElevatedButton(
-                onPressed: SettingsService.localization.locale.languageCode != 'en'
-                    ? () => SettingsService.localization.changeLocale(const Locale('en'))
+                onPressed: LocalizationService.locale.languageCode != 'en'
+                    ? () => LocalizationService.changeLocale(const Locale('en'))
                     : null,
                 child: const Text('english'),
               ),
               ElevatedButton(
-                onPressed: () => SettingsService.localization.changeLocale(null),
+                onPressed: () => LocalizationService.changeLocale(null),
                 child: const Text('device'),
               ),
             ],

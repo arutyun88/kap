@@ -21,16 +21,10 @@ class LocalizationService extends GetxService {
 
   static LocalizationService to = Get.find<LocalizationService>();
 
-  final _locale = const Locale('ru').obs;
-
-  @override
-  void onInit() {
-    super.onInit();
-    _locale.value = _platformLocale();
-  }
+  static final _locale = const Locale('ru').obs;
 
   static Future<void> init() async {
-    await Hive.openBox(StorageKeys.settings);
+    final settings = await Hive.openBox(StorageKeys.settings);
     final env = EnvironmentService.to.environment;
     final appInfo = EnvironmentService.to.appInfo;
     final fData = await _getData(env, appInfo);
@@ -40,21 +34,23 @@ class LocalizationService extends GetxService {
       GlobalCupertinoLocalizations.delegate,
       GlobalWidgetsLocalizations.delegate,
     ];
+    changeLocale(Locale(settings.get(StorageKeys.locale)));
     final convertedMap = await _setData(fData, env);
     return Get.lazyPut(() => LocalizationService._(convertedMap, delegate));
   }
 
-  Locale get locale => _locale.value;
+  static Locale get locale => _locale.value;
 
-  void changeLocale(Locale? selectedLocale) {
+  static void changeLocale(Locale? selectedLocale) async {
     if (selectedLocale == null || !AppLocalizations.delegate.isSupported(selectedLocale)) {
       _locale.value = _platformLocale();
     } else {
       _locale.value = selectedLocale;
     }
+    await Hive.box(StorageKeys.settings).put(StorageKeys.locale, _locale.value.languageCode);
   }
 
-  Locale _platformLocale() => PlatformDispatcher.instance.locale;
+  static Locale _platformLocale() => PlatformDispatcher.instance.locale;
 
   static Future<dynamic> _getData(Environment env, PackageInfo appInfo) async {
     try {
