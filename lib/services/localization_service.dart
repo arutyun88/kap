@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
@@ -31,14 +30,9 @@ class LocalizationService extends GetxService {
   }
 
   static Future<void> init() async {
-    final value = await Hive.openBox(StorageKeys.settings);
-    log(value.keys.toString());
-    log(value.values.toString());
-
+    await Hive.openBox(StorageKeys.settings);
     final env = EnvironmentService.to.environment;
     final appInfo = EnvironmentService.to.appInfo;
-    log(env.name.toString());
-    log(appInfo.toString());
     final fData = await _getData(env, appInfo);
     var delegate = [
       fData == null ? AppLocalizations.delegate : const AppLocalizationsCustomDelegate(),
