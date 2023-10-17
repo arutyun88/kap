@@ -4,7 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:kap/app/modules/first/controllers/first_controller.dart';
 import 'package:kap/config/l10n/custom_app_localizations.dart';
-import 'package:ui_kit/ui_kit.dart';
+import 'package:kap/config/palette/palette.dart';
+import 'package:kap/config/theme/typography.dart';
 
 @RoutePage()
 class FirstView extends StatelessWidget {
@@ -25,15 +26,15 @@ class FirstView extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: controller.goToSecondPage,
-                  child: Text('GO TO SECOND PAGE', style: context.theme.textTheme.lineThroughXL),
+                  child: Text('GO TO SECOND PAGE', style: context.theme.textTheme.through),
                 ),
                 Text(
                   context.dictionary.language,
-                  style: context.theme.textTheme.bodyLightXL.copyWith(color: Palette.mainPalette.primary.tone80),
+                  style: context.theme.textTheme.body.copyWith(color: Palette.main.primary.light),
                 ),
                 Text(
                   context.dictionary.helloWithUsername('some'),
-                  style: context.theme.textTheme.lineThroughXS.copyWith(color: Palette.neutralPalette.text.tone50),
+                  style: context.theme.textTheme.through.copyWith(color: Palette.support.warning.light),
                 ),
               ],
             ),

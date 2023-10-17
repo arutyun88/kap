@@ -21,10 +21,6 @@ dependencies:
   hive: ^2.2.3
   path_provider: ^2.0.15
   flutter_svg: ^2.0.7
-  ui_kit:
-    git:
-      url: https://gitlab+deploy-token-15:VHgqxEZuBFgR7Pu7gyxf@assets.kap.com/ui_kit.git
-      ref: fe54d9d01a7022b667f433c5c21344beed958844
 
 dev_dependencies:
   flutter_test:

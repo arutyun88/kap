@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ui_kit/ui_kit.dart';
+import 'package:kap/config/palette/palette.dart';
 
 class AppTheme {
-  static ThemeData get light => KitTheme.theme(
+  static ThemeData get light => _Theme.theme(
         fontFamily: 'Red Hat Display',
-        fontMainColor: Palette.mainPalette.primary.tone60,
+        fontMainColor: Palette.main.primary.dark,
       ).copyWith(
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(
@@ -13,14 +13,25 @@ class AppTheme {
         ),
       );
 
-  static ThemeData get dark => KitTheme.theme(
+  static ThemeData get dark => _Theme.theme(
         fontFamily: 'Panchang',
         // fontFamily: 'Red Hat Display',
-        fontMainColor: Palette.neutralPalette.text,
+        fontMainColor: Palette.main.secondary,
       ).copyWith(
         scaffoldBackgroundColor: Colors.black,
         appBarTheme: const AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle.light,
         ),
+      );
+}
+
+abstract class _Theme {
+  static ThemeData theme({
+    String? fontFamily,
+    Color? fontMainColor,
+  }) =>
+      ThemeData(
+        fontFamily: fontFamily,
+        textTheme: TextTheme(bodySmall: TextStyle(color: fontMainColor, overflow: TextOverflow.ellipsis)),
       );
 }
