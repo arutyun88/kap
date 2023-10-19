@@ -5,7 +5,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:kap/config/theme/app_theme.dart';
 import 'package:kap/services/storage/storage_service.dart';
-import 'package:kap/services/storage_keys.dart';
+import 'package:kap/services/storage/storage_keys.dart';
 
 class ThemeService extends GetxService with WidgetsBindingObserver {
   ThemeService._(this.theme);

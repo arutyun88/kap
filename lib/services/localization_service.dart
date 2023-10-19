@@ -10,7 +10,7 @@ import 'package:kap/config/l10n/app_localization_custom_delegate.dart';
 import 'package:kap/services/environment_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kap/services/firebase_service.dart';
-import 'package:kap/services/storage_keys.dart';
+import 'package:kap/services/storage/storage_keys.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class LocalizationService extends GetxService {

@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:kap/services/environment_service.dart';
-import 'package:kap/services/storage_keys.dart';
+import 'package:kap/services/storage/storage_keys.dart';
 
 class StorageService extends GetxService {
   static StorageService to = Get.find<StorageService>();
