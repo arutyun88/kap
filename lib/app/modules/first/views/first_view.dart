@@ -5,7 +5,9 @@ import 'package:get/get.dart';
 import 'package:kap/app/modules/first/controllers/first_controller.dart';
 import 'package:kap/config/l10n/custom_app_localizations.dart';
 import 'package:kap/config/palette/palette.dart';
+import 'package:kap/config/theme/app_theme.dart';
 import 'package:kap/config/theme/typography.dart';
+import 'package:kap/services/theme_service.dart';
 
 @RoutePage()
 class FirstView extends StatelessWidget {
@@ -35,6 +37,18 @@ class FirstView extends StatelessWidget {
                 Text(
                   context.dictionary.helloWithUsername('some'),
                   style: context.theme.textTheme.through.copyWith(color: Palette.support.warning.light),
+                ),
+                ElevatedButton(
+                  onPressed: () => ThemeService.to.change(AppTheme.light),
+                  child: Text('Light', style: context.theme.textTheme.through),
+                ),
+                ElevatedButton(
+                  onPressed: () => ThemeService.to.change(AppTheme.dark),
+                  child: Text('Dark', style: context.theme.textTheme.through),
+                ),
+                ElevatedButton(
+                  onPressed: () => ThemeService.to.change(null),
+                  child: Text('Device', style: context.theme.textTheme.through),
                 ),
               ],
             ),

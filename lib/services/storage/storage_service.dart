@@ -6,16 +6,15 @@ import 'package:kap/services/storage_keys.dart';
 class StorageService extends GetxService {
   static StorageService to = Get.find<StorageService>();
 
-  StorageService._(this.themeName, this.localeName);
+  StorageService._(this.box);
 
   static Future<void> init() async {
     Hive.init(EnvironmentService.to.documentsDirectory.path);
     final box = await Hive.openBox(StorageKeys.settings);
-    final String? theme = box.get(StorageKeys.theme);
-    final String? locale = box.get(StorageKeys.locale);
-    Get.lazyPut(() => StorageService._(theme.obs, locale.obs));
+    Get.lazyPut(() => StorageService._(box));
   }
 
-  final Rx<String?> themeName;
-  final Rx<String?> localeName;
+  Future<void> set(String key, dynamic value) async => await box.put(key, value);
+
+  final Box box;
 }
