@@ -7,7 +7,7 @@ import 'package:kap/config/theme/app_theme.dart';
 import 'package:kap/services/storage/storage_service.dart';
 import 'package:kap/services/storage/storage_keys.dart';
 
-class ThemeService extends GetxService with WidgetsBindingObserver {
+class ThemeService extends GetxService {
   ThemeService._(this.theme);
 
   static ThemeService to = Get.find<ThemeService>();
@@ -32,26 +32,5 @@ class ThemeService extends GetxService with WidgetsBindingObserver {
   void change(ThemeData? value) {
     theme.value = value ?? _platformTheme();
     StorageService.to.set(StorageKeys.theme, value?.brightness.name);
-  }
-
-  @override
-  void didChangePlatformBrightness() {
-    super.didChangePlatformBrightness();
-    final themeName = StorageService.to.box.get(StorageKeys.theme);
-    if (themeName == null) {
-      theme.value = _platformTheme();
-    }
-  }
-
-  @override
-  void onInit() {
-    WidgetsBinding.instance.addObserver(this);
-    super.onInit();
-  }
-
-  @override
-  void onClose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.onClose();
   }
 }
