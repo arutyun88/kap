@@ -1,6 +1,6 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:kap/services/localization_service.dart';
+import 'package:kap/services/settings/localization_service.dart';
 
 extension LocalizationsExtension on BuildContext {
   AppLocalizations get dictionary => AppLocalizations.of(this)!;

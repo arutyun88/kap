@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kap/config/l10n/custom_app_localizations.dart';
-import 'package:kap/services/localization_service.dart';
+import 'package:kap/services/settings/localization_service.dart';
 
 @RoutePage()
 class SecondView extends StatelessWidget {

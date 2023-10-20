@@ -6,8 +6,8 @@ import 'package:kap/config/environment.dart';
 import 'package:kap/services/environment_service.dart';
 import 'package:kap/services/firebase_service.dart';
 import 'package:kap/services/launch_tracker_service.dart';
-import 'package:kap/services/localization_service.dart';
-import 'package:kap/services/observer_service.dart';
+import 'package:kap/services/settings/localization_service.dart';
+import 'package:kap/services/settings/observer_service.dart';
 import 'package:kap/services/storage/storage_service.dart';
 import 'package:kap/services/settings/theme_service.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:kap/services/localization_service.dart';
+import 'package:kap/services/settings/localization_service.dart';
 import 'package:kap/services/settings/theme_service.dart';
 import 'package:kap/services/storage/storage_keys.dart';
 import 'package:kap/services/storage/storage_service.dart';
