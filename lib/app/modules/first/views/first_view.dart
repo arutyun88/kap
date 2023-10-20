@@ -7,7 +7,7 @@ import 'package:kap/config/l10n/custom_app_localizations.dart';
 import 'package:kap/config/palette/palette.dart';
 import 'package:kap/config/theme/app_theme.dart';
 import 'package:kap/config/theme/typography.dart';
-import 'package:kap/services/theme_service.dart';
+import 'package:kap/services/settings/theme_service.dart';
 
 @RoutePage()
 class FirstView extends StatelessWidget {

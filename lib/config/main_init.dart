@@ -8,7 +8,7 @@ import 'package:kap/services/firebase_service.dart';
 import 'package:kap/services/launch_tracker_service.dart';
 import 'package:kap/services/localization_service.dart';
 import 'package:kap/services/storage/storage_service.dart';
-import 'package:kap/services/theme_service.dart';
+import 'package:kap/services/settings/theme_service.dart';
 
 void mainInit(Environment env) async {
   WidgetsFlutterBinding.ensureInitialized();
