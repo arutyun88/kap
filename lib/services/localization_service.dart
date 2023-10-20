@@ -10,6 +10,7 @@ import 'package:kap/config/l10n/app_localization_custom_delegate.dart';
 import 'package:kap/services/environment_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kap/services/firebase_service.dart';
+import 'package:kap/services/storage/storage_service.dart';
 import 'package:kap/services/storage/storage_keys.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -24,7 +25,6 @@ class LocalizationService extends GetxService {
   static final _locale = const Locale('ru').obs;
 
   static Future<void> init() async {
-    final settings = await Hive.openBox(StorageKeys.settings);
     final env = EnvironmentService.to.environment;
     final appInfo = EnvironmentService.to.appInfo;
     final fData = await _getData(env, appInfo);
@@ -34,9 +34,11 @@ class LocalizationService extends GetxService {
       GlobalCupertinoLocalizations.delegate,
       GlobalWidgetsLocalizations.delegate,
     ];
-    changeLocale(Locale(settings.get(StorageKeys.locale)));
     final convertedMap = await _setData(fData, env);
-    return Get.lazyPut(() => LocalizationService._(convertedMap, delegate));
+
+    final localeName = StorageService.to.box.get(StorageKeys.locale);
+    changeLocale(localeName != null ? Locale(localeName!) : null);
+    Get.lazyPut(() => LocalizationService._(convertedMap, delegate));
   }
 
   static Locale get locale => _locale.value;
@@ -44,10 +46,11 @@ class LocalizationService extends GetxService {
   static void changeLocale(Locale? selectedLocale) async {
     if (selectedLocale == null || !AppLocalizations.delegate.isSupported(selectedLocale)) {
       _locale.value = _platformLocale();
+      await StorageService.to.set(StorageKeys.locale, null);
     } else {
       _locale.value = selectedLocale;
+      await StorageService.to.set(StorageKeys.locale, _locale.value.languageCode);
     }
-    await Hive.box(StorageKeys.settings).put(StorageKeys.locale, _locale.value.languageCode);
   }
 
   static Locale _platformLocale() => PlatformDispatcher.instance.locale;
