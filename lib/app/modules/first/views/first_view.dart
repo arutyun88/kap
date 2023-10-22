@@ -10,6 +10,11 @@ import 'package:kap/config/theme/typography.dart';
 import 'package:kap/services/settings/theme_service.dart';
 
 @RoutePage()
+class FirstEmptyView extends AutoRouter {
+  const FirstEmptyView({super.key});
+}
+
+@RoutePage()
 class FirstView extends StatelessWidget {
   const FirstView({
     Key? key,
@@ -29,6 +34,10 @@ class FirstView extends StatelessWidget {
                 ElevatedButton(
                   onPressed: controller.goToSecondPage,
                   child: Text('GO TO SECOND PAGE', style: context.theme.textTheme.through),
+                ),
+                ElevatedButton(
+                  onPressed: controller.goToProfilePage,
+                  child: Text('GO TO PROFILE', style: context.theme.textTheme.through),
                 ),
                 Text(
                   context.dictionary.language,

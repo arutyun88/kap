@@ -9,4 +9,6 @@ class FirstController extends GetxController {
   FirstController(this.context);
 
   void goToSecondPage() => AutoRouter.of(context).push(const SecondRoute());
+
+  void goToProfilePage() => AutoRouter.of(context).navigate(const MeEmptyRoute(children: [MeRoute(), ProfileRoute()]));
 }
