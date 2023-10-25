@@ -15,6 +15,22 @@ abstract class Palette {
     },
   );
 
+  static const ColorTone bottomNavigationBarBackgroundColor = ColorTone(
+    0xFFE1D8FB,
+    <ColorType, Color>{
+      ColorType.dark: Color(0xFFE1D8FB),
+      ColorType.light: Color(0xFF150C2F),
+    },
+  );
+
+  static const ColorTone bottomNavigationBarItemColor = ColorTone(
+    0xFF150C2F,
+    <ColorType, Color>{
+      ColorType.light: Color(0xFF150C2F),
+      ColorType.dark: Color(0xFFE1D8FB),
+    },
+  );
+
   static final MainPalette main = MainPalette();
   static final SupportPalette support = SupportPalette();
 }

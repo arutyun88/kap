@@ -12,6 +12,12 @@ class AppTheme {
         appBarTheme: const AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle.dark,
         ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: Palette.bottomNavigationBarBackgroundColor.light,
+          elevation: 0.0,
+          selectedItemColor: Palette.bottomNavigationBarItemColor.light,
+          unselectedItemColor: Palette.bottomNavigationBarItemColor.light.withOpacity(.4),
+        ),
       );
 
   static ThemeData get dark => _Theme.theme(
@@ -22,6 +28,12 @@ class AppTheme {
         scaffoldBackgroundColor: Palette.background.dark,
         appBarTheme: const AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle.light,
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: Palette.bottomNavigationBarBackgroundColor.dark,
+          elevation: 0.0,
+          selectedItemColor: Palette.bottomNavigationBarItemColor.dark,
+          unselectedItemColor: Palette.bottomNavigationBarItemColor.dark.withOpacity(.5),
         ),
       );
 }

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:kap/app/widgets/app_bottom_navigation_bar.dart';
 import 'package:kap/router/app_router.dart';
 
 @RoutePage()
@@ -17,16 +18,11 @@ class RootView extends StatelessWidget {
           body: Stack(
             children: [
               child,
-              Align(
-                alignment: AlignmentDirectional.bottomCenter,
-                child: BottomNavigationBar(
-                  onTap: (index) => tabController.index = index,
-                  currentIndex: tabController.index,
-                  items: const [
-                    BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
-                    BottomNavigationBarItem(icon: Icon(Icons.person), label: ''),
-                  ],
-                ),
+              AppBottomNavigationBar(
+                onTapToItem: (index) => tabController.index = index,
+                selectedIndex: tabController.index,
+                icons: const [Icons.home, Icons.person],
+                floatingActionButtonIcon: Icons.add,
               ),
             ],
           ),
