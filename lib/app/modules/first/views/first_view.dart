@@ -1,13 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:kap/app/modules/first/controllers/first_controller.dart';
+import 'package:kap/app/widgets/app_shader_scaffold.dart';
 import 'package:kap/config/l10n/custom_app_localizations.dart';
 import 'package:kap/config/palette/palette.dart';
 import 'package:kap/config/theme/app_theme.dart';
 import 'package:kap/config/theme/typography.dart';
 import 'package:kap/services/settings/theme_service.dart';
+import 'package:kap/services/widgets_size_service.dart';
 
 @RoutePage()
 class FirstEmptyView extends AutoRouter {
@@ -16,21 +17,19 @@ class FirstEmptyView extends AutoRouter {
 
 @RoutePage()
 class FirstView extends StatelessWidget {
-  const FirstView({
-    Key? key,
-  }) : super(key: key);
+  const FirstView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder(
-      init: FirstController(context),
-      builder: (controller) => AnnotatedRegion<SystemUiOverlayStyle>(
-        value: Theme.of(context).appBarTheme.systemOverlayStyle ?? SystemUiOverlayStyle.light,
-        child: Scaffold(
-          body: Center(
+    return AppShaderScaffold(
+      body: GetBuilder(
+        init: FirstController(context),
+        builder: (controller) => SingleChildScrollView(
+          child: Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                SizedBox(height: context.mediaQueryPadding.top),
                 ElevatedButton(
                   onPressed: controller.goToSecondPage,
                   child: Text('GO TO SECOND PAGE', style: context.theme.textTheme.through),
@@ -59,6 +58,18 @@ class FirstView extends StatelessWidget {
                   onPressed: () => ThemeService.to.change(null),
                   child: Text('Device', style: context.theme.textTheme.through),
                 ),
+                ...List.generate(
+                  10,
+                  (index) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Container(
+                      height: 100,
+                      width: double.infinity,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+                SizedBox(height: WidgetsSizeService.to.bottomBarHeight.value),
               ],
             ),
           ),
