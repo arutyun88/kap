@@ -10,6 +10,7 @@ import 'package:kap/services/settings/localization_service.dart';
 import 'package:kap/services/settings/observer_service.dart';
 import 'package:kap/services/storage/storage_service.dart';
 import 'package:kap/services/settings/theme_service.dart';
+import 'package:kap/services/widgets_size_service.dart';
 
 void mainInit(Environment env) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +38,9 @@ Future<void> _initServices({required Environment env}) async {
   LaunchTrackerService.to.startService('LocalizationService');
   await LocalizationService.init();
   LaunchTrackerService.to.stopService('LocalizationService');
+  LaunchTrackerService.to.startService('WidgetsSizeService');
+  WidgetsSizeService.init();
+  LaunchTrackerService.to.stopService('WidgetsSizeService');
 
   log(LaunchTrackerService.to.toString());
 }

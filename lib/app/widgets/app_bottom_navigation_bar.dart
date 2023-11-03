@@ -2,8 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kap/services/widgets_size_service.dart';
 
-class AppBottomNavigationBar extends StatelessWidget {
+class AppBottomNavigationBar extends StatefulWidget {
   const AppBottomNavigationBar({
     super.key,
     this.itemSize = 56.0,
@@ -24,30 +25,48 @@ class AppBottomNavigationBar extends StatelessWidget {
   final VoidCallback? floatingActionButtonOnTap;
 
   @override
+  State<AppBottomNavigationBar> createState() => _AppBottomNavigationBarState();
+}
+
+class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
+  final GlobalKey _childKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _getChildSize());
+  }
+
+  void _getChildSize() => WidgetsSizeService.to
+      .setBottomBarHeight((_childKey.currentContext?.findRenderObject() as RenderBox).size.height);
+
+  @override
   Widget build(BuildContext context) {
     final selectedItemColor = context.theme.bottomNavigationBarTheme.selectedItemColor;
     final borderRadius = BorderRadius.circular(16.0);
     final borderRadiusWithFloating = borderRadius.copyWith(
-      topRight: Radius.circular(floatingActionButtonSize / 2),
-      bottomRight: Radius.circular(floatingActionButtonSize / 2),
+      topRight: Radius.circular(widget.floatingActionButtonSize / 2),
+      bottomRight: Radius.circular(widget.floatingActionButtonSize / 2),
     );
 
     const padding = 12.0;
-    final itemWidth =
-        (context.width - (padding * 2) - (floatingActionButtonIcon == null ? 0.0 : floatingActionButtonSize)) /
-            icons.length;
+    final itemWidth = (context.width -
+            (padding * 2) -
+            (widget.floatingActionButtonIcon == null ? 0.0 : widget.floatingActionButtonSize)) /
+        widget.icons.length;
 
     return Align(
       alignment: AlignmentDirectional.bottomCenter,
       child: Padding(
+        key: _childKey,
         padding: const EdgeInsets.symmetric(horizontal: padding).copyWith(
           bottom: context.mediaQueryPadding.bottom == 0 ? padding : context.mediaQueryPadding.bottom,
         ),
         child: Stack(
-          alignment: icons.length.isOdd ? AlignmentDirectional.centerEnd : AlignmentDirectional.center,
+          alignment: widget.icons.length.isOdd ? AlignmentDirectional.centerEnd : AlignmentDirectional.center,
           children: [
             ClipRRect(
-              borderRadius: floatingActionButtonIcon != null && icons.length.isOdd
+              borderRadius: widget.floatingActionButtonIcon != null && widget.icons.length.isOdd
                   ? borderRadiusWithFloating
                   : borderRadius,
               clipBehavior: Clip.hardEdge,
@@ -57,25 +76,25 @@ class AppBottomNavigationBar extends StatelessWidget {
                   color: context.theme.bottomNavigationBarTheme.backgroundColor!.withOpacity(.2),
                   child: Row(
                     children: List.generate(
-                      icons.length,
+                      widget.icons.length,
                       (index) => Padding(
-                        padding: floatingActionButtonIcon == null
+                        padding: widget.floatingActionButtonIcon == null
                             ? EdgeInsets.zero
                             : EdgeInsets.only(
-                                right: icons.length.isOdd
-                                    ? index == (icons.length - 1)
-                                        ? floatingActionButtonSize
+                                right: widget.icons.length.isOdd
+                                    ? index == (widget.icons.length - 1)
+                                        ? widget.floatingActionButtonSize
                                         : 0.0
-                                    : index == ((icons.length / 2) - 1)
-                                        ? floatingActionButtonSize
+                                    : index == ((widget.icons.length / 2) - 1)
+                                        ? widget.floatingActionButtonSize
                                         : 0.0,
                               ),
                         child: _AppBottomNavigationBarItem(
-                          itemSize: itemSize,
-                          onTap: () => onTapToItem(index),
+                          itemSize: widget.itemSize,
+                          onTap: () => widget.onTapToItem(index),
                           index: index,
-                          selectedIndex: selectedIndex,
-                          icon: icons[index],
+                          selectedIndex: widget.selectedIndex,
+                          icon: widget.icons[index],
                           width: itemWidth,
                         ),
                       ),
@@ -84,15 +103,15 @@ class AppBottomNavigationBar extends StatelessWidget {
                 ),
               ),
             ),
-            if (floatingActionButtonIcon != null)
+            if (widget.floatingActionButtonIcon != null)
               SizedBox(
-                width: floatingActionButtonSize,
-                height: floatingActionButtonSize,
+                width: widget.floatingActionButtonSize,
+                height: widget.floatingActionButtonSize,
                 child: FittedBox(
                   child: FloatingActionButton(
                     backgroundColor: selectedItemColor,
-                    onPressed: floatingActionButtonOnTap,
-                    child: Icon(floatingActionButtonIcon, color: context.theme.scaffoldBackgroundColor),
+                    onPressed: widget.floatingActionButtonOnTap,
+                    child: Icon(widget.floatingActionButtonIcon, color: context.theme.scaffoldBackgroundColor),
                   ),
                 ),
               ),
