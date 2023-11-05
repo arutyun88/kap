@@ -18,7 +18,7 @@ class AppBottomNavigationBar extends StatefulWidget {
 
   final double itemSize;
   final List<IconData> icons;
-  final int Function(int) onTapToItem;
+  final void Function(int) onTapToItem;
   final int selectedIndex;
   final IconData? floatingActionButtonIcon;
   final double floatingActionButtonSize;
@@ -43,7 +43,7 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     final selectedItemColor = context.theme.bottomNavigationBarTheme.selectedItemColor;
-    final borderRadius = BorderRadius.circular(16.0);
+    final borderRadius = BorderRadius.circular(10.0);
     final borderRadiusWithFloating = borderRadius.copyWith(
       topRight: Radius.circular(widget.floatingActionButtonSize / 2),
       bottomRight: Radius.circular(widget.floatingActionButtonSize / 2),
