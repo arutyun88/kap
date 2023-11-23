@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kap/app/widgets/grabber.dart';
 
 class ShaderScrollableSheet extends StatelessWidget {
   const ShaderScrollableSheet({
@@ -58,32 +59,10 @@ class ShaderScrollableSheet extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const Align(alignment: AlignmentDirectional.topCenter, child: _Grabber()),
+                  const Align(alignment: AlignmentDirectional.topCenter, child: Grabber()),
                 ],
               ),
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _Grabber extends StatelessWidget {
-  const _Grabber({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 14.0,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 6.0, bottom: 3.0),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(2.5),
-          clipBehavior: Clip.hardEdge,
-          child: ColoredBox(
-            color: Theme.of(context).bottomSheetTheme.dragHandleColor ?? Colors.grey,
-            child: const SizedBox(height: double.maxFinite, width: 36),
           ),
         ),
       ),
