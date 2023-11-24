@@ -13,6 +13,7 @@ class AppShaderScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: ShaderMask(
         shaderCallback: (rect) {
           const startStart = 0.0;

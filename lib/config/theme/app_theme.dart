@@ -5,7 +5,7 @@ import 'package:kap/config/palette/palette.dart';
 class AppTheme {
   static ThemeData get light => _Theme.theme(
         fontFamily: 'Red Hat Display',
-        fontMainColor: Palette.main.primary.dark,
+        fontMainColor: Palette.main.text.light,
       ).copyWith(
         brightness: Brightness.light,
         scaffoldBackgroundColor: Palette.background.light,
@@ -18,11 +18,15 @@ class AppTheme {
           selectedItemColor: Palette.bottomNavigationBarItemColor.light,
           unselectedItemColor: Palette.bottomNavigationBarItemColor.light.withOpacity(.4),
         ),
+        bottomSheetTheme: BottomSheetThemeData(
+          dragHandleColor: Palette.main.grabber.light,
+          modalBackgroundColor: Colors.transparent,
+        ),
       );
 
   static ThemeData get dark => _Theme.theme(
         fontFamily: 'Red Hat Display',
-        fontMainColor: Palette.main.secondary,
+        fontMainColor: Palette.main.text.dark,
       ).copyWith(
         brightness: Brightness.dark,
         scaffoldBackgroundColor: Palette.background.dark,
@@ -34,6 +38,10 @@ class AppTheme {
           elevation: 0.0,
           selectedItemColor: Palette.bottomNavigationBarItemColor.dark,
           unselectedItemColor: Palette.bottomNavigationBarItemColor.dark.withOpacity(.5),
+        ),
+        bottomSheetTheme: BottomSheetThemeData(
+          dragHandleColor: Palette.main.grabber.dark,
+          modalBackgroundColor: Colors.transparent,
         ),
       );
 }

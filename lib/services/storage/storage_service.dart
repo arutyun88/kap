@@ -16,5 +16,7 @@ class StorageService extends GetxService {
 
   Future<void> set(String key, dynamic value) async => await box.put(key, value);
 
+  Future<void> get(String key, dynamic value) async => await box.get(key);
+
   final Box box;
 }
