@@ -6,7 +6,6 @@ import 'package:kap/app/widgets/app_shader_scaffold.dart';
 import 'package:kap/config/l10n/custom_app_localizations.dart';
 import 'package:kap/config/palette/palette.dart';
 import 'package:kap/config/theme/app_theme.dart';
-import 'package:kap/config/theme/typography.dart';
 import 'package:kap/services/settings/theme_service.dart';
 import 'package:kap/services/widgets_size_service.dart';
 
@@ -33,31 +32,31 @@ class FirstView extends StatelessWidget {
                   SizedBox(height: context.mediaQueryPadding.top),
                   ElevatedButton(
                     onPressed: controller.goToSecondPage,
-                    child: Text('GO TO SECOND PAGE', style: context.theme.textTheme.through),
+                    child: Text('GO TO SECOND PAGE', style: context.theme.textTheme.bodySmall),
                   ),
                   ElevatedButton(
                     onPressed: controller.goToProfilePage,
-                    child: Text('GO TO PROFILE', style: context.theme.textTheme.through),
+                    child: Text('GO TO PROFILE', style: context.theme.textTheme.bodySmall),
                   ),
                   Text(
                     context.dictionary.language,
-                    style: context.theme.textTheme.body.copyWith(color: Palette.main.primary.light),
+                    style: context.theme.textTheme.bodyMedium?.copyWith(color: Palette.main.primary.light),
                   ),
                   Text(
                     context.dictionary.helloWithUsername('some'),
-                    style: context.theme.textTheme.through.copyWith(color: Palette.support.warning.light),
+                    style: context.theme.textTheme.bodySmall?.copyWith(color: Palette.support.warning.light),
                   ),
                   ElevatedButton(
                     onPressed: () => ThemeService.to.change(AppTheme.light),
-                    child: Text('Light', style: context.theme.textTheme.through),
+                    child: Text('Light', style: context.theme.textTheme.bodySmall),
                   ),
                   ElevatedButton(
                     onPressed: () => ThemeService.to.change(AppTheme.dark),
-                    child: Text('Dark', style: context.theme.textTheme.through),
+                    child: Text('Dark', style: context.theme.textTheme.bodySmall),
                   ),
                   ElevatedButton(
                     onPressed: () => ThemeService.to.change(null),
-                    child: Text('Device', style: context.theme.textTheme.through),
+                    child: Text('Device', style: context.theme.textTheme.bodySmall),
                   ),
                   ...List.generate(
                     5,

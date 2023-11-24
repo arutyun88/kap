@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kap/app/modules/me/controllers/me_controller.dart';
-import 'package:kap/config/theme/typography.dart';
 
 @RoutePage()
 class MeEmptyView extends AutoRouter {
@@ -22,7 +21,7 @@ class MeView extends StatelessWidget {
           body: Center(
             child: ElevatedButton(
               onPressed: controller.goToProfilePage,
-              child: Text('GO TO PROFILE', style: context.theme.textTheme.through),
+              child: Text('GO TO PROFILE', style: context.theme.textTheme.bodyMedium),
             ),
           ),
         );
