@@ -29,6 +29,9 @@ class CustomAppLocalizations extends AppLocalizations {
   String get feed => _localizedStrings[localeName]?['feed'] ?? _default.feed;
 
   @override
+  String get authorizationTitle => _localizedStrings[localeName]?['authorizationTitle'] ?? _default.authorizationTitle;
+
+  @override
   String get messages => _localizedStrings[localeName]?['messages'] ?? _default.messages;
 
   @override
@@ -36,4 +39,14 @@ class CustomAppLocalizations extends AppLocalizations {
 
   @override
   String get settings => _localizedStrings[localeName]?['settings'] ?? _default.settings;
+
+  @override
+  String get authorizationDescription =>
+      _localizedStrings[localeName]?['authorizationDescription'] ?? _default.authorizationDescription;
+
+  @override
+  String get continueButton => _localizedStrings[localeName]?['continueButton'] ?? _default.continueButton;
+
+  @override
+  String get authorizationHint => _localizedStrings[localeName]?['authorizationHint'] ?? _default.authorizationHint;
 }

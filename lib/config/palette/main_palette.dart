@@ -20,6 +20,14 @@ class MainPalette {
     },
   );
 
+  final ColorTone hint =  ColorTone(
+    0xFFFFFFFF,
+    <ColorType, Color>{
+      ColorType.dark: const Color(0xFFEBEBF5).withOpacity(.5),
+      ColorType.light: const Color(0xFF3C3C42).withOpacity(.5),
+    },
+  );
+
   final ColorTone primary = const ColorTone(
     0xFF150C2F,
     <ColorType, Color>{

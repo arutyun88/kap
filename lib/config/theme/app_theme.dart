@@ -3,7 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:kap/config/palette/palette.dart';
 
 class AppTheme {
-  static ThemeData get light => _Theme.theme(defaultTextStyle: TextStyle(color: Palette.main.text.light)).copyWith(
+  static ThemeData get light => _Theme.theme(
+        defaultTextStyle: TextStyle(color: Palette.main.text.light),
+        inputDecorationBorderColor: Palette.main.hint.light,
+      ).copyWith(
         brightness: Brightness.light,
         scaffoldBackgroundColor: Palette.background.light,
         appBarTheme: const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
@@ -19,7 +22,10 @@ class AppTheme {
         ),
       );
 
-  static ThemeData get dark => _Theme.theme(defaultTextStyle: TextStyle(color: Palette.main.text.dark)).copyWith(
+  static ThemeData get dark => _Theme.theme(
+        defaultTextStyle: TextStyle(color: Palette.main.text.dark),
+        inputDecorationBorderColor: Palette.main.hint.dark,
+      ).copyWith(
         brightness: Brightness.dark,
         scaffoldBackgroundColor: Palette.background.dark,
         appBarTheme: const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
@@ -37,24 +43,39 @@ class AppTheme {
 }
 
 abstract class _Theme {
-  static ThemeData theme({required TextStyle defaultTextStyle}) => ThemeData(
-        fontFamily: 'Red Hat Display',
-        textTheme: TextTheme(
-          displayLarge: defaultTextStyle,
-          displayMedium: defaultTextStyle,
-          displaySmall: defaultTextStyle,
-          headlineLarge: defaultTextStyle,
-          headlineMedium: defaultTextStyle,
-          headlineSmall: defaultTextStyle,
-          titleLarge: defaultTextStyle,
-          titleMedium: defaultTextStyle,
-          titleSmall: defaultTextStyle,
-          bodyLarge: defaultTextStyle,
-          bodyMedium: defaultTextStyle,
-          bodySmall: defaultTextStyle,
-          labelLarge: defaultTextStyle,
-          labelMedium: defaultTextStyle,
-          labelSmall: defaultTextStyle,
-        ),
-      );
+  static ThemeData theme({
+    required TextStyle defaultTextStyle,
+    required Color inputDecorationBorderColor,
+  }) =>
+      ThemeData(
+          fontFamily: 'Red Hat Display',
+          textTheme: TextTheme(
+            displayLarge: defaultTextStyle,
+            displayMedium: defaultTextStyle,
+            displaySmall: defaultTextStyle,
+            headlineLarge: defaultTextStyle,
+            headlineMedium: defaultTextStyle,
+            headlineSmall: defaultTextStyle,
+            titleLarge: defaultTextStyle,
+            titleMedium: defaultTextStyle,
+            titleSmall: defaultTextStyle,
+            bodyLarge: defaultTextStyle,
+            bodyMedium: defaultTextStyle,
+            bodySmall: defaultTextStyle,
+            labelLarge: defaultTextStyle,
+            labelMedium: defaultTextStyle,
+            labelSmall: defaultTextStyle,
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+            hintStyle: TextStyle(color: inputDecorationBorderColor),
+            contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: const BorderSide(color: Palette.accent, width: 0.5),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: const BorderSide(color: Palette.accent, width: 1.0),
+            ),
+          ));
 }

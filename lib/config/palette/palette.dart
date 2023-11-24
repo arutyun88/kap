@@ -6,12 +6,13 @@ import 'package:kap/config/palette/main_palette.dart';
 import 'package:kap/config/palette/support_palette.dart';
 
 abstract class Palette {
+  static const Color accent = Color(0xFFFF9726);
+
   static const ColorTone background = ColorTone(
     0xFF150C2F,
     <ColorType, Color>{
-      ColorType.dark: Color(0xFF150C2F),
-      ColorType.medium: Color(0xFF150C2F),
-      ColorType.light: Color(0xFFE1D8FB),
+      ColorType.dark: Color.fromRGBO(30, 30, 40, 1),
+      ColorType.light: Color.fromRGBO(255, 255, 255, 1),
     },
   );
 

@@ -1,6 +1,10 @@
 {
   "@@locale": "en",
   "language": "english",
+  "continueButton": "Continue",
+  "authorizationTitle": "Authorization",
+  "authorizationDescription": "To continue, you need to log in. Enter your phone number or email address. If you don't have an account yet, you will be redirected to the registration page.",
+  "authorizationHint": "start typing...",
   "feed": "feed",
   "messages": "messages",
   "settings": "settings",
