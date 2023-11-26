@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 class AuthController extends GetxController {
   AuthController(this.context);
 
+  final TextEditingController textController = TextEditingController();
+
   final FocusNode focusNode = FocusNode();
 
   final BuildContext context;

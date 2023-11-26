@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kap/app/modules/auth/controllers/auth_controller.dart';
@@ -12,7 +14,7 @@ class AuthView extends StatelessWidget {
         context,
         child: const AuthView._(),
         title: context.dictionary.authorizationTitle,
-      ).then((value) => debugPrint('AuthView.show returned: ${value.toString()}'));
+      ).then((value) => log('AuthView.show returned: ${value.toString()}'));
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,8 @@ class AuthView extends StatelessWidget {
                   focusNode: controller.focusNode,
                   onTap: controller.onTapToTextField,
                   hintText: context.dictionary.authorizationHint,
+                  keyboardType: TextInputType.phone,
+                  controller: controller.textController,
                 ),
               ),
             ],
