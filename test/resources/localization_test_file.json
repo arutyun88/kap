@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "data": {
+    "en_US": {
+      "locale": "en",
+      "country": "US",
+      "language": "english develop remote",
+      "feed": "feed",
+      "messages": "messages",
+      "profile": "profile",
+      "settings": "settings"
+    },
+    "ru_RU": {
+      "locale": "ru",
+      "country": "RU",
+      "language": "русский develop удалённый",
+      "feed": "лента",
+      "messages": "сообщения",
+      "profile": "профиль",
+      "settings": "настройки"
+    }
+  }
+}
