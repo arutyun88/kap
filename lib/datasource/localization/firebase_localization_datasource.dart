@@ -7,6 +7,7 @@ import 'package:kap/config/environment.dart';
 import 'package:kap/datasource/localization/localization_datasource.dart';
 import 'package:kap/domain/exceptions/custom_exception.dart';
 import 'package:kap/services/environment_service.dart';
+import 'package:kap/services/storage/storage_keys.dart';
 
 class FirebaseLocalizationDatasource implements LocalizationDatasource {
   final FirebaseDatabase firebaseDatabase;
@@ -24,16 +25,33 @@ class FirebaseLocalizationDatasource implements LocalizationDatasource {
       if (data.value != null) map = jsonDecode(jsonEncode(data.value));
       return map;
     } on FirebaseException catch (e) {
-      throw LocalizationDataGettingException('${e.runtimeType}: FirebaseLocalizationDatasource: ${e.message}');
+      throw LocalizationDataGettingException('${e.runtimeType}: FirebaseLocalizationDatasource: getData: ${e.message}');
     } catch (e) {
-      log('${e.runtimeType}: FirebaseLocalizationDatasource: $e');
+      log('${e.runtimeType}: FirebaseLocalizationDatasource: getData: $e');
       rethrow;
     }
   }
 
   @override
-  Future<int> getVersion() {
-    // TODO: implement getVersion
-    throw UnimplementedError();
+  Future<int> getVersion() async {
+    try {
+      final appInfo = EnvironmentService.to.appInfo;
+      final env = EnvironmentService.to.environment;
+      final firebaseDataPath = env == Environment.prod ? '${env.name}/${appInfo.version.split('.').first}' : env.name;
+      final version = (await firebaseDatabase.ref('$firebaseDataPath/${StorageKeys.version}').get()).value;
+      if (version == null || version is! int) {
+        throw const LocalizationVersionCheckException(
+            'LocalizationVersionCheckException: FirebaseLocalizationDatasource: getVersion: failed');
+      }
+      return version;
+    } on FirebaseException catch (e) {
+      throw LocalizationDataGettingException(
+          '${e.runtimeType}: FirebaseLocalizationDatasource: getVersion: ${e.message}');
+    } on LocalizationVersionCheckException {
+      rethrow;
+    } catch (e) {
+      log('${e.runtimeType}: FirebaseLocalizationDatasource: getVersion: $e');
+      rethrow;
+    }
   }
 }

@@ -55,4 +55,43 @@ main() {
       verifyNever(() => databaseReference.get());
     });
   });
+
+
+  group('getVersion tests', () {
+    test('getVersion returns version from Firebase', () async {
+      when(() => firebaseDatabase.ref(any())).thenAnswer((_) => databaseReference);
+      when(() => databaseReference.get()).thenAnswer((_) => Future.value(MockDataSnapshot(1)));
+
+      final data = await firebaseLocalizationDatasource.getVersion();
+
+      expect(data, 1);
+      verify(() => firebaseDatabase.ref(any())).called(1);
+      verify(() => databaseReference.get()).called(1);
+    });
+
+    test('getVersion throws FirebaseException', () async {
+      when(() => firebaseDatabase.ref(any())).thenThrow(FirebaseException(plugin: ''));
+
+      expect(firebaseLocalizationDatasource.getVersion, throwsA(isA<LocalizationDataGettingException>()));
+      verify(() => firebaseDatabase.ref(any())).called(1);
+      verifyNever(() => databaseReference.get());
+    });
+
+    test('getVersion throws LocalizationVersionCheckException', () async {
+      when(() => firebaseDatabase.ref(any())).thenAnswer((_) => databaseReference);
+      when(() => databaseReference.get()).thenAnswer((_) => Future.value(MockDataSnapshot(null)));
+
+      expect(firebaseLocalizationDatasource.getVersion, throwsA(isA<LocalizationVersionCheckException>()));
+      verify(() => firebaseDatabase.ref(any())).called(1);
+      verify(() => databaseReference.get()).called(1);
+    });
+
+    test('getVersion throws other Exception', () async {
+      when(() => firebaseDatabase.ref(any())).thenThrow(Exception());
+
+      expect(firebaseLocalizationDatasource.getVersion, throwsA(isNot(isA<LocalizationDataGettingException>())));
+      verify(() => firebaseDatabase.ref(any())).called(1);
+      verifyNever(() => databaseReference.get());
+    });
+  });
 }

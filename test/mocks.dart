@@ -14,7 +14,7 @@ class MockFirebaseDatabase extends Mock implements FirebaseDatabase {}
 
 class MockDataSnapshot extends Mock implements DataSnapshot {
   @override
-  final Map<String, dynamic> value;
+  final dynamic value;
 
   MockDataSnapshot(this.value);
 }
