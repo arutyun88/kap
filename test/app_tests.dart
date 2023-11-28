@@ -1,7 +1,9 @@
-import 'repositories/localization_repository_test.dart' as repository;
-import 'services/localization_service_test.dart' as service;
+import 'repositories/repositories.dart' as repositories;
+import 'services/services.dart' as services;
+import 'datasources/datasources.dart' as datasources;
 
 main() {
-  repository.main();
-  service.main();
+  repositories.main();
+  services.main();
+  datasources.main();
 }
