@@ -17,41 +17,43 @@ class FirebaseLocalizationDatasource implements LocalizationDatasource {
   @override
   Future<Map<String, dynamic>> getData() async {
     try {
-      final appInfo = EnvironmentService.to.appInfo;
-      final env = EnvironmentService.to.environment;
-      final firebaseDataPath = env == Environment.prod ? '${env.name}/${appInfo.version.split('.').first}' : env.name;
-      final data = await firebaseDatabase.ref(firebaseDataPath).get();
-      Map<String, dynamic> map = {};
-      if (data.value != null) map = jsonDecode(jsonEncode(data.value));
-      return map;
-    } on FirebaseException catch (e) {
-      throw LocalizationDataGettingException('${e.runtimeType}: FirebaseLocalizationDatasource: getData: ${e.message}');
+      final data = await _getData('${_getPath()}/${StorageKeys.version}');
+      return data != null ? jsonDecode(jsonEncode(data)) : <String, dynamic>{};
     } catch (e) {
-      log('${e.runtimeType}: FirebaseLocalizationDatasource: getData: $e');
-      rethrow;
+      throw _getException(e, 'getData');
     }
   }
 
   @override
   Future<int> getVersion() async {
     try {
-      final appInfo = EnvironmentService.to.appInfo;
-      final env = EnvironmentService.to.environment;
-      final firebaseDataPath = env == Environment.prod ? '${env.name}/${appInfo.version.split('.').first}' : env.name;
-      final version = (await firebaseDatabase.ref('$firebaseDataPath/${StorageKeys.version}').get()).value;
+      final version = await _getData('${_getPath()}/${StorageKeys.version}');
       if (version == null || version is! int) {
         throw const LocalizationVersionCheckException(
             'LocalizationVersionCheckException: FirebaseLocalizationDatasource: getVersion: failed');
       }
       return version;
-    } on FirebaseException catch (e) {
-      throw LocalizationDataGettingException(
-          '${e.runtimeType}: FirebaseLocalizationDatasource: getVersion: ${e.message}');
     } on LocalizationVersionCheckException {
       rethrow;
     } catch (e) {
-      log('${e.runtimeType}: FirebaseLocalizationDatasource: getVersion: $e');
-      rethrow;
+      throw _getException(e, 'getVersion');
     }
+  }
+
+  String _getPath() {
+    final appInfo = EnvironmentService.to.appInfo;
+    final env = EnvironmentService.to.environment;
+    return env == Environment.prod ? '${env.name}/${appInfo.version.split('.').first}' : env.name;
+  }
+
+  Future<Object?> _getData(String path) async => (await firebaseDatabase.ref(path).get()).value;
+
+  Object _getException(Object e, String methodName) {
+    if (e is FirebaseException) {
+      throw LocalizationDataGettingException(
+          '${e.runtimeType}: FirebaseLocalizationDatasource: $methodName: ${e.message}');
+    }
+    log('${e.runtimeType}: FirebaseLocalizationDatasource: $methodName: $e');
+    return e;
   }
 }
