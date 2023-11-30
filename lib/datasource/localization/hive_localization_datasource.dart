@@ -9,9 +9,25 @@ class HiveLocalizationDatasource implements LocalLocalizationDatasource {
   const HiveLocalizationDatasource();
 
   @override
-  Future<Map<String, dynamic>> getData() {
-    // TODO: implement getData
-    throw UnimplementedError();
+  Future<Map<String, dynamic>> getData() async {
+    const failedMessage = 'LocalizationDataGettingException: FirebaseLocalizationDatasource: getData: failed';
+
+    late Box box;
+
+    try {
+      box = Hive.box(StorageKeys.settings);
+      final data = await box.get(StorageKeys.localizations);
+      if (data == null) throw const LocalizationDataGettingException(failedMessage);
+      if (data is! Map<String, dynamic>) throw TypeError();
+      return data;
+    } on TypeError {
+      throw const LocalizationDataGettingException(failedMessage);
+    } catch (e) {
+      log('${e.runtimeType}: FirebaseLocalizationDatasource: getVersion: $e');
+      rethrow;
+    } finally {
+      await box.close();
+    }
   }
 
   @override
