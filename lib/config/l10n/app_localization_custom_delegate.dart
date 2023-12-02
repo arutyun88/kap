@@ -7,14 +7,13 @@ class AppLocalizationsCustomDelegate extends LocalizationsDelegate<AppLocalizati
   const AppLocalizationsCustomDelegate();
 
   @override
-  Future<AppLocalizations> load(Locale locale) {
-    return SynchronousFuture<AppLocalizations>(CustomAppLocalizations(locale.languageCode));
-  }
+  Future<AppLocalizations> load(Locale locale) => SynchronousFuture<CustomAppLocalizations>(_customLookup(locale));
 
   @override
-  bool isSupported(Locale locale) =>
-      AppLocalizations.supportedLocales.map((e) => e.languageCode).toList().contains(locale.languageCode);
+  bool isSupported(Locale locale) => CustomAppLocalizations.supportedLocales.contains(locale);
 
   @override
   bool shouldReload(AppLocalizationsCustomDelegate old) => false;
 }
+
+CustomAppLocalizations _customLookup(Locale locale) => CustomAppLocalizations(locale);

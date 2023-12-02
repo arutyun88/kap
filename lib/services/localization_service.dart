@@ -7,15 +7,19 @@ import 'package:kap/repositories/localization_repository.dart';
 class NewLocalizationService extends GetxService {
   NewLocalizationService._(this._localizationRepository);
 
-  static void init(LocalizationRepository localizationRepository) {
-    Get.put(NewLocalizationService._(localizationRepository));
+  static Future<void> init(LocalizationRepository localizationRepository) async {
+    final isRegistered = Get.isRegistered<NewLocalizationService>();
+    if (!isRegistered) {
+      final service = Get.put(NewLocalizationService._(localizationRepository));
+      await service.checkAndUpdateLocalization();
+    }
   }
 
   final LocalizationRepository _localizationRepository;
 
   static final NewLocalizationService to = Get.find<NewLocalizationService>();
 
-  final RxMap<String, dynamic> localization = <String, dynamic>{}.obs;
+  final RxMap<String, Map<String, String>> localization = <String, Map<String, String>>{}.obs;
 
   Future<void> checkAndUpdateLocalization() async {
     try {
