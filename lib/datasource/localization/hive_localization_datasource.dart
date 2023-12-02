@@ -15,7 +15,7 @@ class HiveLocalizationDatasource implements LocalLocalizationDatasource {
     late Box box;
 
     try {
-      box = Hive.box(StorageKeys.settings);
+      box = await Hive.openBox(StorageKeys.settings);
       final data = await box.get(StorageKeys.localizations);
       if (data == null) throw const LocalizationDataGettingException(failedMessage);
       if (data is! Map<String, dynamic>) throw TypeError();

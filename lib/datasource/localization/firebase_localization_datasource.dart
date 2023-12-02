@@ -17,7 +17,7 @@ class FirebaseLocalizationDatasource implements LocalizationDatasource {
   @override
   Future<Map<String, dynamic>> getData() async {
     try {
-      final data = await _getData('${_getPath()}/${StorageKeys.version}');
+      final data = await _getData('${_getPath()}/${StorageKeys.data}');
       return data != null ? jsonDecode(jsonEncode(data)) : <String, dynamic>{};
     } catch (e) {
       throw _getException(e, 'getData');
