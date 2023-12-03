@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kap/config/extensions/map_extensions.dart';
 import 'package:kap/domain/exceptions/custom_exception.dart';
 import 'package:kap/repositories/localization_repository.dart';
 import 'package:kap/services/localization_service.dart';
@@ -14,12 +15,14 @@ main() {
 
   late LocalizationRepository localizationRepository;
   late NewLocalizationService localizationService;
-  late Map<String, dynamic> localizationMap;
+  late Map<String, Map<String, String>> localizationMap;
 
   setUpAll(() async {
-    localizationMap = jsonDecode(await File('test/resources/localization_test_file.json').readAsString());
+    localizationMap =
+        (jsonDecode(await File('test/resources/localization_test_file.json').readAsString())['data'] as Map).convertTo;
     localizationRepository = MockLocalizationRepository();
-    NewLocalizationService.init(localizationRepository);
+    when(localizationRepository.checkAndUpdateLocalization).thenAnswer((_) => Future.value(localizationMap));
+    await NewLocalizationService.init(localizationRepository);
     localizationService = NewLocalizationService.to;
   });
 
@@ -33,7 +36,7 @@ main() {
       when(localizationRepository.checkAndUpdateLocalization).thenAnswer((_) => Future.value(localizationMap));
       await localizationService.checkAndUpdateLocalization();
       expect(localizationService.localization, equals(localizationMap));
-      verify(() => localizationRepository.checkAndUpdateLocalization()).called(1);
+      verify(() => localizationRepository.checkAndUpdateLocalization()).called(2);
     });
 
     group('localization service failed tests', () {

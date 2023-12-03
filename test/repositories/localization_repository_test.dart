@@ -6,6 +6,7 @@ import 'package:kap/datasource/localization/local_localization_datasource.dart';
 import 'package:kap/datasource/localization/localization_datasource.dart';
 import 'package:kap/domain/exceptions/custom_exception.dart';
 import 'package:kap/repositories/localization_repository.dart';
+import 'package:kap/config/extensions/map_extensions.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../mocks.dart';
@@ -16,10 +17,11 @@ main() {
   late LocalizationRepository localizationRepository;
   late LocalLocalizationDatasource localLocalizationDatasource;
   late LocalizationDatasource remoteLocalizationDatasource;
-  late Map<String, dynamic> localizationMap;
+  late Map<String, Map<String, String>> localizationMap;
 
   setUpAll(() async {
-    localizationMap = jsonDecode(await File('test/resources/localization_test_file.json').readAsString());
+    localizationMap =
+        (jsonDecode(await File('test/resources/localization_test_file.json').readAsString())['data'] as Map).convertTo;
     localLocalizationDatasource = MockLocalLocalizationDatasource();
     remoteLocalizationDatasource = MockRemoteLocalizationDatasource();
     localizationRepository = LocalizationRepository(
