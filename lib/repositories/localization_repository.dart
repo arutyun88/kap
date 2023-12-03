@@ -35,4 +35,8 @@ class LocalizationRepository {
   Future<Locale?> getCurrentLocale() async {
     return _localLocalizationDatasource.getCurrentLocale();
   }
+
+  Future<void> setCurrentLocale(Locale? locale) async {
+    _localLocalizationDatasource.setCurrentLocale(locale);
+  }
 }

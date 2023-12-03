@@ -133,7 +133,7 @@ main() {
   });
 
   group('getCurrentLocale tests', () {
-    test('getCurrentLocale then locale is not null', () async {
+    test('getCurrentLocale when locale is not null', () async {
       when(localLocalizationDatasource.getCurrentLocale).thenAnswer((_) => Future.value('en_US'.locale));
 
       final result = await localizationRepository.getCurrentLocale();
@@ -141,12 +141,30 @@ main() {
       expect(result, 'en_US'.locale);
     });
 
-    test('getCurrentLocale then locale is null', () async {
+    test('getCurrentLocale when locale is null', () async {
       when(localLocalizationDatasource.getCurrentLocale).thenAnswer((_) => Future.value(null));
 
       final result = await localizationRepository.getCurrentLocale();
 
       expect(result, null);
+    });
+  });
+
+  group('setCurrentLocale tests', () {
+    test('setCurrentLocale when locale is not null', () async {
+      when(() => localLocalizationDatasource.setCurrentLocale(any())).thenAnswer((_) => Future.value());
+
+      await localizationRepository.setCurrentLocale('en_US'.locale);
+
+      verify(() => localLocalizationDatasource.setCurrentLocale(any())).called(1);
+    });
+
+    test('setCurrentLocale when locale is null', () async {
+      when(() => localLocalizationDatasource.setCurrentLocale(null)).thenAnswer((_) => Future.value());
+
+      await localizationRepository.setCurrentLocale(null);
+
+      verify(() => localLocalizationDatasource.setCurrentLocale(any())).called(1);
     });
   });
 }
