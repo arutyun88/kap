@@ -1,6 +1,8 @@
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:hive/hive.dart';
+import 'package:kap/config/l10n/custom_app_localizations.dart';
 import 'package:kap/datasource/localization/local_localization_datasource.dart';
 import 'package:kap/domain/exceptions/custom_exception.dart';
 import 'package:kap/services/storage/storage_keys.dart';
@@ -10,7 +12,7 @@ class HiveLocalizationDatasource implements LocalLocalizationDatasource {
 
   @override
   Future<Map<String, dynamic>> getData() async {
-    const failedMessage = 'LocalizationDataGettingException: FirebaseLocalizationDatasource: getData: failed';
+    const failedMessage = 'LocalizationDataGettingException: HiveLocalizationDatasource: getData: failed';
 
     late Box box;
 
@@ -23,7 +25,7 @@ class HiveLocalizationDatasource implements LocalLocalizationDatasource {
     } on TypeError {
       throw const LocalizationDataGettingException(failedMessage);
     } catch (e) {
-      log('${e.runtimeType}: FirebaseLocalizationDatasource: getVersion: $e');
+      log('${e.runtimeType}: HiveLocalizationDatasource: getVersion: $e');
       rethrow;
     } finally {
       await box.close();
@@ -39,12 +41,21 @@ class HiveLocalizationDatasource implements LocalLocalizationDatasource {
       return version ?? 0;
     } on TypeError {
       throw const LocalizationVersionCheckException(
-          'LocalizationVersionCheckException: FirebaseLocalizationDatasource: getVersion: failed');
+          'LocalizationVersionCheckException: HiveLocalizationDatasource: getVersion: failed');
     } catch (e) {
-      log('${e.runtimeType}: FirebaseLocalizationDatasource: getVersion: $e');
+      log('${e.runtimeType}: HiveLocalizationDatasource: getVersion: $e');
       rethrow;
     } finally {
       await box.close();
     }
+  }
+
+  @override
+  Future<Locale?> getCurrentLocale() async {
+    final Box box = await Hive.openBox(StorageKeys.settings);
+    final currentLocale = await box.get(StorageKeys.currentLocale);
+    await box.close();
+    if (currentLocale is! String) return null;
+    return currentLocale.locale;
   }
 }
