@@ -11,7 +11,7 @@ import 'package:kap/services/environment_service.dart';
 import 'package:kap/services/firebase_service.dart';
 import 'package:kap/services/launch_tracker_service.dart';
 import 'package:kap/services/auth_service.dart';
-import 'package:kap/services/localization_service.dart';
+import 'package:kap/services/settings/localization_service.dart';
 import 'package:kap/services/settings/observer_service.dart';
 import 'package:kap/services/storage/storage_service.dart';
 import 'package:kap/services/settings/theme_service.dart';
@@ -44,7 +44,7 @@ Future<void> _initServices({required Environment env}) async {
   await FirebaseService.init();
   LaunchTrackerService.to.stopService('FirebaseService');
   LaunchTrackerService.to.startService('LocalizationService');
-  await NewLocalizationService.init(
+  await LocalizationService.init(
     LocalizationRepository(
       localLocalizationDatasource: const HiveLocalizationDatasource(),
       remoteLocalizationDatasource: FirebaseLocalizationDatasource(firebaseDatabase: FirebaseDatabase.instance),

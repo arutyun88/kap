@@ -7,7 +7,7 @@ import 'package:kap/config/extensions/map_extensions.dart';
 import 'package:kap/config/l10n/custom_app_localizations.dart';
 import 'package:kap/domain/exceptions/custom_exception.dart';
 import 'package:kap/repositories/localization_repository.dart';
-import 'package:kap/services/localization_service.dart';
+import 'package:kap/services/settings/localization_service.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../mocks.dart';
@@ -16,7 +16,7 @@ main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   late LocalizationRepository localizationRepository;
-  late NewLocalizationService localizationService;
+  late LocalizationService localizationService;
   late Map<String, Map<String, String>> localizationMap;
 
   setUpAll(() async {
@@ -27,15 +27,15 @@ main() {
     when(localizationRepository.checkAndUpdateLocalization).thenAnswer((_) => Future.value(localizationMap));
     when(localizationRepository.getCurrentLocale).thenAnswer((_) => Future.value('ru_RU'.locale));
 
-    await NewLocalizationService.init(localizationRepository);
-    localizationService = NewLocalizationService.to;
+    await LocalizationService.init(localizationRepository);
+    localizationService = LocalizationService.to;
   });
 
   group('localization service tests', () {
     group('localizationService initialization tests', () {
-      test(' service is initialized', () => expect(localizationService.runtimeType, NewLocalizationService));
+      test(' service is initialized', () => expect(localizationService.runtimeType, LocalizationService));
 
-      test('locale is initialized', () => expect(NewLocalizationService.locale.value, 'ru_RU'.locale));
+      test('locale is initialized', () => expect(LocalizationService.locale.value, 'ru_RU'.locale));
     });
 
     test('localization service success test', () async {
@@ -70,7 +70,7 @@ main() {
 
       await localizationService.setLocale('ru_RU'.locale);
 
-      expect(NewLocalizationService.locale.value, 'ru_RU'.locale);
+      expect(LocalizationService.locale.value, 'ru_RU'.locale);
       verify(() => localizationRepository.setCurrentLocale(any())).called(1);
     });
 
@@ -79,7 +79,7 @@ main() {
 
       await localizationService.setLocale(null);
 
-      expect(NewLocalizationService.locale.value, PlatformDispatcher.instance.locale);
+      expect(LocalizationService.locale.value, PlatformDispatcher.instance.locale);
       verify(() => localizationRepository.setCurrentLocale(any())).called(1);
     });
   });

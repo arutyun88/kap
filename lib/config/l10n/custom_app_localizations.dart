@@ -2,7 +2,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:kap/config/l10n/app_localization_custom_delegate.dart';
-import 'package:kap/services/localization_service.dart';
+import 'package:kap/services/settings/localization_service.dart';
 
 extension LocalizationsExtension on BuildContext {
   AppLocalizations get dictionary => AppLocalizations.of(this)!;
@@ -30,8 +30,7 @@ class CustomAppLocalizations extends AppLocalizations {
     return Localizations.of<CustomAppLocalizations>(context, CustomAppLocalizations);
   }
 
-  static final List<Locale> supportedLocales =
-      NewLocalizationService.to.localization.keys.map((e) => e.locale).toList();
+  static final List<Locale> supportedLocales = LocalizationService.to.localization.keys.map((e) => e.locale).toList();
 
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
     AppLocalizationsCustomDelegate(),
@@ -42,7 +41,7 @@ class CustomAppLocalizations extends AppLocalizations {
 
   final Locale _locale;
 
-  final _localizedStrings = NewLocalizationService.to.localization;
+  final _localizedStrings = LocalizationService.to.localization;
 
   AppLocalizations get _default => lookupAppLocalizations(AppLocalizations.supportedLocales.first);
 

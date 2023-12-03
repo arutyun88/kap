@@ -20,9 +20,9 @@ class ObserverService extends GetxService with WidgetsBindingObserver {
   @override
   void didChangeLocales(List<Locale>? locales) {
     super.didChangeLocales(locales);
-    final localeName = StorageService.to.box.get(StorageKeys.locale);
+    final localeName = StorageService.to.box.get(StorageKeys.currentLocale);
     if (localeName == null && locales != null && locales.isNotEmpty) {
-      LocalizationService.changeLocale(locales.first);
+      LocalizationService.to.setLocale(locales.first);
     }
   }
 

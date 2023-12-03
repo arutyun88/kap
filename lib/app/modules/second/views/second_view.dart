@@ -31,26 +31,19 @@ class SecondView extends StatelessWidget {
                     context.dictionary.profile,
                     style: context.textTheme.bodyLarge?.copyWith(color: Palette.support.danger),
                   ),
-                  ElevatedButton(
-                    onPressed: LocalizationService.locale.languageCode != 'ru'
-                        ? () => LocalizationService.changeLocale(const Locale('ru'))
-                        : null,
-                    child: Text(
-                      'русский',
-                      style: context.textTheme.bodyLarge?.copyWith(color: Palette.support.danger),
+                  ...CustomAppLocalizations.supportedLocales.map(
+                    (locale) => ElevatedButton(
+                      onPressed: LocalizationService.locale.value != locale
+                          ? () => LocalizationService.to.setLocale(locale)
+                          : null,
+                      child: Text(
+                        LocalizationService.to.localization[locale.canonized]?['language'] ?? '',
+                        style: context.textTheme.bodyLarge?.copyWith(color: Palette.support.danger),
+                      ),
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: LocalizationService.locale.languageCode != 'en'
-                        ? () => LocalizationService.changeLocale(const Locale('en'))
-                        : null,
-                    child: Text(
-                      'english',
-                      style: context.textTheme.bodyLarge?.copyWith(color: Palette.support.danger),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => LocalizationService.changeLocale(null),
+                    onPressed: () => LocalizationService.to.setLocale(null),
                     child: Text(
                       'device',
                       style: context.textTheme.bodyLarge?.copyWith(color: Palette.support.danger),
