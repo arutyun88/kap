@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kap/config/extensions/map_extensions.dart';
+import 'package:kap/config/l10n/custom_app_localizations.dart';
 import 'package:kap/domain/exceptions/custom_exception.dart';
 import 'package:kap/repositories/localization_repository.dart';
 import 'package:kap/services/localization_service.dart';
@@ -22,15 +23,17 @@ main() {
         (jsonDecode(await File('test/resources/localization_test_file.json').readAsString())['data'] as Map).convertTo;
     localizationRepository = MockLocalizationRepository();
     when(localizationRepository.checkAndUpdateLocalization).thenAnswer((_) => Future.value(localizationMap));
+    when(localizationRepository.getCurrentLocale).thenAnswer((_) => Future.value('ru_RU'.locale));
     await NewLocalizationService.init(localizationRepository);
     localizationService = NewLocalizationService.to;
   });
 
   group('localization service tests', () {
-    test(
-      'localization service is initialized',
-      () => expect(localizationService.runtimeType, NewLocalizationService),
-    );
+    group('localizationService initialization tests', () {
+      test(' service is initialized', () => expect(localizationService.runtimeType, NewLocalizationService));
+
+      test('locale is initialized', () => expect(NewLocalizationService.locale.value, 'ru_RU'.locale));
+    });
 
     test('localization service success test', () async {
       when(localizationRepository.checkAndUpdateLocalization).thenAnswer((_) => Future.value(localizationMap));

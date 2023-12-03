@@ -1,6 +1,9 @@
 import 'dart:developer';
+import 'dart:ui';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
+import 'package:kap/config/l10n/custom_app_localizations.dart';
 import 'package:kap/domain/exceptions/custom_exception.dart';
 import 'package:kap/repositories/localization_repository.dart';
 
@@ -12,12 +15,14 @@ class NewLocalizationService extends GetxService {
     if (!isRegistered) {
       final service = Get.put(NewLocalizationService._(localizationRepository));
       await service.checkAndUpdateLocalization();
+      await service._updateCurrentLocale();
     }
   }
 
   final LocalizationRepository _localizationRepository;
 
   static final NewLocalizationService to = Get.find<NewLocalizationService>();
+  static final Rx<Locale> locale = const Locale('ru', 'RU').obs;
 
   final RxMap<String, Map<String, String>> localization = <String, Map<String, String>>{}.obs;
 
@@ -30,6 +35,20 @@ class NewLocalizationService extends GetxService {
     } on Exception catch (e) {
       log('${e.runtimeType}: e');
       rethrow;
+    }
+  }
+
+  Future<void> _updateCurrentLocale() async {
+    final currentLocale = await _localizationRepository.getCurrentLocale();
+    if (currentLocale != null) {
+      locale.value = currentLocale;
+      return;
+    }
+    final platformLocale = PlatformDispatcher.instance.locale;
+    if (CustomAppLocalizations.supportedLocales.contains(platformLocale)) {
+      locale.value = platformLocale;
+    } else {
+      locale.value = AppLocalizations.supportedLocales.first;
     }
   }
 }
