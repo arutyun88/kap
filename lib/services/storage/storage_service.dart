@@ -14,9 +14,9 @@ class StorageService extends GetxService {
     Get.lazyPut(() => StorageService._(box));
   }
 
-  Future<void> set(String key, dynamic value) async => await box.put(key, value);
+  Future<void> set(String key, dynamic value) async => await (await Hive.openBox(StorageKeys.settings)).put(key, value);
 
-  Future<void> get(String key, dynamic value) async => await box.get(key);
+  Future<void> get(String key, dynamic value) async => await (await Hive.openBox(StorageKeys.settings)).get(key);
 
   final Box box;
 }
