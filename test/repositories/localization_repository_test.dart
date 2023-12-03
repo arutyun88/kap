@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kap/config/l10n/custom_app_localizations.dart';
 import 'package:kap/datasource/localization/local_localization_datasource.dart';
 import 'package:kap/datasource/localization/localization_datasource.dart';
 import 'package:kap/domain/exceptions/custom_exception.dart';
@@ -128,6 +129,24 @@ main() {
         verify(() => remoteLocalizationDatasource.getData()).called(1);
         verifyNever(() => localLocalizationDatasource.getData());
       });
+    });
+  });
+
+  group('getCurrentLocale tests', () {
+    test('getCurrentLocale then locale is not null', () async {
+      when(localLocalizationDatasource.getCurrentLocale).thenAnswer((_) => Future.value('en_US'.locale));
+
+      final result = await localizationRepository.getCurrentLocale();
+
+      expect(result, 'en_US'.locale);
+    });
+
+    test('getCurrentLocale then locale is null', () async {
+      when(localLocalizationDatasource.getCurrentLocale).thenAnswer((_) => Future.value(null));
+
+      final result = await localizationRepository.getCurrentLocale();
+
+      expect(result, null);
     });
   });
 }

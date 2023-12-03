@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:kap/config/extensions/map_extensions.dart';
 import 'package:kap/datasource/localization/local_localization_datasource.dart';
@@ -29,5 +30,9 @@ class LocalizationRepository {
     } catch (_) {
       rethrow;
     }
+  }
+
+  Future<Locale?> getCurrentLocale() async {
+    return _localLocalizationDatasource.getCurrentLocale();
   }
 }
