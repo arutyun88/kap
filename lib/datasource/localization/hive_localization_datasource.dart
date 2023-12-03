@@ -58,4 +58,10 @@ class HiveLocalizationDatasource implements LocalLocalizationDatasource {
     if (currentLocale is! String) return null;
     return currentLocale.locale;
   }
+
+  @override
+  Future<void> setCurrentLocale(Locale? locale) async {
+    final Box box = await Hive.openBox(StorageKeys.settings);
+    await box.put(StorageKeys.currentLocale, locale?.canonized);
+  }
 }

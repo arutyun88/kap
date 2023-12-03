@@ -73,7 +73,7 @@ main() {
 
     group('getVersion failed tests', () {
       test('getVersion when version is not int', () async {
-        (await Hive.openBox('settings')).put(StorageKeys.localizationVersion, '1');
+        (await Hive.openBox(StorageKeys.settings)).put(StorageKeys.localizationVersion, '1');
         await expectLater(hiveLocalizationDatasource.getVersion(), throwsA(isA<LocalizationVersionCheckException>()));
         expect(Hive.isBoxOpen(StorageKeys.settings), false);
       });
@@ -83,20 +83,35 @@ main() {
   group('getCurrentLocale tests', () {
     group('getCurrentLocale success tests', () {
       test('getCurrentLocale when locale find', () async {
-        (await Hive.openBox('settings')).put(StorageKeys.currentLocale, 'en_US');
+        (await Hive.openBox(StorageKeys.settings)).put(StorageKeys.currentLocale, 'en_US');
         await expectLater(await hiveLocalizationDatasource.getCurrentLocale(), 'en_US'.locale);
         expect(Hive.isBoxOpen(StorageKeys.settings), false);
       });
 
       test('getCurrentLocale when locale not found', () async {
-        (await Hive.openBox('settings')).put(StorageKeys.currentLocale, null);
+        (await Hive.openBox(StorageKeys.settings)).put(StorageKeys.currentLocale, null);
         await expectLater(await hiveLocalizationDatasource.getCurrentLocale(), null);
       });
 
       test('getCurrentLocale when locale is not String', () async {
-        (await Hive.openBox('settings')).put(StorageKeys.currentLocale, 1);
+        (await Hive.openBox(StorageKeys.settings)).put(StorageKeys.currentLocale, 1);
         await expectLater(await hiveLocalizationDatasource.getCurrentLocale(), null);
       });
+    });
+  });
+
+  group('setCurrentLocale tests', () {
+    group('setCurrentLocale success tests', () {
+      test('setCurrentLocale when locale find', () async {
+        await hiveLocalizationDatasource.setCurrentLocale('en_US'.locale);
+        await expectLater((await Hive.openBox(StorageKeys.settings)).get(StorageKeys.currentLocale), 'en_US');
+      });
+
+      test('setCurrentLocale when locale not found', () async {
+        await hiveLocalizationDatasource.setCurrentLocale(null);
+        await expectLater((await Hive.openBox(StorageKeys.settings)).get(StorageKeys.currentLocale), null);
+      });
+
     });
   });
 }

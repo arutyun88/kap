@@ -8,6 +8,7 @@ abstract class StorageKeys {
   static const String localizationVersion = 'localization_version';
   static const String scope = 'scope';
   static const String locale = 'locale';
+  static const String currentLocale = 'current_locale';
   static const String theme = 'theme';
   static const String isLogged = 'logged';
 }
