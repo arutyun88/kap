@@ -38,6 +38,18 @@ class NewLocalizationService extends GetxService {
     }
   }
 
+  Future<void> setLocale(Locale? uLocale) async {
+    await _localizationRepository.setCurrentLocale(uLocale);
+    if (uLocale == null) {
+      final platformLocale = PlatformDispatcher.instance.locale;
+      locale.value = CustomAppLocalizations.supportedLocales.contains(platformLocale)
+          ? platformLocale
+          : AppLocalizations.supportedLocales.first;
+    } else {
+      locale.value = uLocale;
+    }
+  }
+
   Future<void> _updateCurrentLocale() async {
     final currentLocale = await _localizationRepository.getCurrentLocale();
     if (currentLocale != null) {
