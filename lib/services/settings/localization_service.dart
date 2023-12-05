@@ -24,6 +24,8 @@ class LocalizationService extends GetxService {
   static final LocalizationService to = Get.find<LocalizationService>();
   static final Rx<Locale> locale = const Locale('ru', 'RU').obs;
 
+  static Locale get _platformLocale => PlatformDispatcher.instance.locale;
+
   final RxMap<String, Map<String, String>> localization = <String, Map<String, String>>{}.obs;
 
   Future<void> checkAndUpdateLocalization() async {
@@ -38,29 +40,20 @@ class LocalizationService extends GetxService {
     }
   }
 
-  Future<void> setLocale(Locale? uLocale) async {
-    await _localizationRepository.setCurrentLocale(uLocale);
-    if (uLocale == null) {
-      final platformLocale = PlatformDispatcher.instance.locale;
-      locale.value = CustomAppLocalizations.supportedLocales.contains(platformLocale)
-          ? platformLocale
-          : AppLocalizations.supportedLocales.first;
-    } else {
-      locale.value = uLocale;
-    }
-  }
+  Future<void> setLocale(Locale? uLocale) async =>
+      await _localizationRepository.setCurrentLocale(uLocale).whenComplete(() => _setLocale(uLocale));
 
-  Future<void> _updateCurrentLocale() async {
-    final currentLocale = await _localizationRepository.getCurrentLocale();
+  Future<void> _updateCurrentLocale() async => _setLocale(await _localizationRepository.getCurrentLocale());
+
+  void _setLocale(Locale? currentLocale) {
     if (currentLocale != null) {
       locale.value = currentLocale;
       return;
     }
-    final platformLocale = PlatformDispatcher.instance.locale;
-    if (CustomAppLocalizations.supportedLocales.contains(platformLocale)) {
-      locale.value = platformLocale;
-    } else {
-      locale.value = AppLocalizations.supportedLocales.first;
-    }
+    final supportedLocales = CustomAppLocalizations.supportedLocales;
+    locale.value = supportedLocales.contains(_platformLocale)
+        ? _platformLocale
+        : supportedLocales.firstWhereOrNull((element) => element.languageCode == _platformLocale.languageCode) ??
+            AppLocalizations.supportedLocales.first;
   }
 }
