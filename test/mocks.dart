@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:kap/datasource/localization/local_localization_datasource.dart';
 import 'package:kap/datasource/localization/localization_datasource.dart';
@@ -20,3 +21,7 @@ class MockDataSnapshot extends Mock implements DataSnapshot {
 }
 
 class MockDatabaseReference extends Mock implements DatabaseReference {}
+
+class MockFirebaseAuth extends Mock implements FirebaseAuth {}
+
+class FakeDuration extends Fake implements Duration {}

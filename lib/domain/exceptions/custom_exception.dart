@@ -1,4 +1,4 @@
-abstract class CustomException {
+abstract class CustomException implements Exception {
   final String message;
 
   const CustomException(this.message);
@@ -14,4 +14,12 @@ class LocalizationVersionCheckException extends LocalizationException implements
 
 class LocalizationDataGettingException extends LocalizationException implements Exception {
   const LocalizationDataGettingException(super.message);
+}
+
+class AuthorizationException extends CustomException {
+  const AuthorizationException(super.message);
+}
+
+class AuthorizationTimeoutException extends AuthorizationException {
+  const AuthorizationTimeoutException(super.message);
 }
