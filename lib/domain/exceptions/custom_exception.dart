@@ -23,3 +23,7 @@ class AuthorizationException extends CustomException {
 class AuthorizationTimeoutException extends AuthorizationException {
   const AuthorizationTimeoutException(super.message);
 }
+
+class AuthorizationCodeException extends AuthorizationException {
+  const AuthorizationCodeException(super.message);
+}

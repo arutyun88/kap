@@ -25,3 +25,12 @@ class MockDatabaseReference extends Mock implements DatabaseReference {}
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 
 class FakeDuration extends Fake implements Duration {}
+
+class MockUserCredential extends Mock implements UserCredential {}
+
+class FakeAuthCredential extends Fake implements AuthCredential {}
+
+class FakeFirebaseUser extends Fake implements User {
+  @override
+  String get uid => 'some_uid';
+}

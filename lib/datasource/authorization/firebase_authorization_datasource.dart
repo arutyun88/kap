@@ -39,4 +39,20 @@ class FirebaseAuthorizationDatasource implements AuthorizationDatasource {
       },
     );
   }
+
+  @override
+  Future<String> verifyOtp({
+    required String verificationId,
+    required String smsCode,
+  }) async {
+    final credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
+    try {
+      final user = await _auth.signInWithCredential(credential);
+      return user.user!.uid;
+    } on FirebaseAuthException catch (e) {
+      throw AuthorizationCodeException(e.message ?? 'authorization code exception');
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
