@@ -1,6 +1,8 @@
 coverage
 *.lock
 *.gr.*
+*.g.*
+*.freezed.*
 
 # Miscellaneous
 *.class

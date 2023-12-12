@@ -27,3 +27,11 @@ class AuthorizationTimeoutException extends AuthorizationException {
 class AuthorizationCodeException extends AuthorizationException {
   const AuthorizationCodeException(super.message);
 }
+
+class PermissionException extends CustomException {
+  const PermissionException(super.message);
+}
+
+class DeviceGetException extends CustomException {
+  const DeviceGetException(super.message);
+}

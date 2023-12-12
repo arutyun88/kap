@@ -10,4 +10,6 @@ Future<void> utilSetUp() async {
     const MethodChannel('dev.fluttercommunity.plus/package_info'),
     (MethodCall call) async => call.method == 'getAll' ? await Future.value(packageInfo) : await Future.value(),
   );
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+      const MethodChannel('com.di1shuai.flutter/platform_device_id'), (_) async => '');
 }
