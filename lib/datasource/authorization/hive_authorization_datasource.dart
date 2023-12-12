@@ -15,4 +15,10 @@ class HiveAuthorizationDatasource implements LocalAuthorizationDatasource {
       rethrow;
     }
   }
+
+  @override
+  Future<void> updateAuthorizedState(bool state) async {
+    final box = await Hive.openBox(StorageKeys.settings);
+    await box.put(StorageKeys.isLogged, state);
+  }
 }

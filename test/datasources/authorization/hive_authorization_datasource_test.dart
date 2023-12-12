@@ -44,4 +44,18 @@ main() {
       expect(actual, false);
     });
   });
+
+  group('updateAuthorizedState tests', () {
+    test('when set state authorized', () async {
+      await hiveLocalizationDatasource.updateAuthorizedState(true);
+
+      expect((await Hive.openBox(StorageKeys.settings)).get(StorageKeys.isLogged), true);
+    });
+
+    test('when set state not authorized', () async {
+      await hiveLocalizationDatasource.updateAuthorizedState(false);
+
+      expect((await Hive.openBox(StorageKeys.settings)).get(StorageKeys.isLogged), false);
+    });
+  });
 }
