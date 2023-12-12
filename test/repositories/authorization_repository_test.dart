@@ -143,4 +143,12 @@ main() {
       expect(actual, false);
     });
   });
+
+  group('setLocalAuthState tests', () {
+    test('when set state authorized', () async {
+      when(() => localAuthorizationDatasource.updateAuthorizedState(any())).thenAnswer((_) => Future.value());
+
+      expect(authorizationRepository.setLocalAuthState(true), isNot(isA<Exception>()));
+    });
+  });
 }

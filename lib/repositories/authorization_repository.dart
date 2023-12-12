@@ -24,6 +24,14 @@ class AuthorizationRepository {
     }
   }
 
+  Future<void> setLocalAuthState(bool state) async {
+    try {
+      await _localAuthorizationDatasource.updateAuthorizedState(state);
+    } catch (_) {
+      rethrow;
+    }
+  }
+
   Future<void> phoneVerification(
     String phoneNumber, {
     required Function(String) whenSuccess,
@@ -46,7 +54,8 @@ class AuthorizationRepository {
     required String phoneNumber,
   }) async {
     try {
-      final isNewUser = await _remoteAuthorizationDatasource.verifyOtp(verificationId: verificationId, smsCode: smsCode);
+      final isNewUser =
+          await _remoteAuthorizationDatasource.verifyOtp(verificationId: verificationId, smsCode: smsCode);
       if (isNewUser) {
         await _deviceDatasource.createDeviceFromPhoneNumber(phoneNumber);
       }
