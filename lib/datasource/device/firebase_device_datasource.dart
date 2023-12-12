@@ -33,21 +33,33 @@ class FirebaseDeviceDatasource implements DeviceDatasource {
         }
       }
       return null;
-    } on FirebaseException catch (e) {
-      final message = 'FirebaseDeviceDatasource: ${e.runtimeType}: ${e.message}';
-      if (e.code == 'permission-denied') {
-        throw PermissionException(message);
-      } else {
-        throw DeviceGetException(message);
-      }
-    } catch (e) {
-      rethrow;
+    } on Exception catch (e) {
+      throw _exception(e, 'getDeviceByDeviceId');
     }
   }
 
   @override
-  Future<void> createDeviceFromPhoneNumber(String phoneNumber) {
-    // TODO: implement createDeviceFromPhoneNumber
-    throw UnimplementedError();
+  Future<void> createDeviceFromPhoneNumber(String phoneNumber) async {
+    final id = await _deviceId;
+    try {
+      await _firebaseFirestore.collection('devices').doc(id).set(
+            DeviceModel(id: id, platform: _platform, phoneNumber: phoneNumber).toJson(),
+          );
+    } on Exception catch (e) {
+      throw _exception(e, 'createDeviceFromPhoneNumber');
+    }
+  }
+
+  Exception _exception(Exception exception, String methodName) {
+    if (exception is FirebaseException) {
+      final message = 'FirebaseDeviceDatasource: $methodName: ${exception.runtimeType}: ${exception.message}';
+      if (exception.code == 'permission-denied') {
+        return PermissionException(message);
+      } else {
+        return DeviceGetException(message);
+      }
+    } else {
+      return exception;
+    }
   }
 }

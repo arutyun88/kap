@@ -83,4 +83,39 @@ main() {
       });
     });
   });
+
+  group('createDeviceFromPhoneNumber tests', () {
+    final phoneNumber = deviceInfo['phone_number'] ?? '';
+
+    group('success tests', () {
+      test('when device created', () async {
+        when(() => firebaseFirestore.collection(any())).thenReturn(collectionReference);
+        when(() => collectionReference.doc(any())).thenReturn(documentReference);
+        when(() => documentReference.set(any())).thenAnswer((_) => Future.value());
+
+        await expectLater(deviceDatasource.createDeviceFromPhoneNumber(phoneNumber), isNot(isA<Exception>));
+        verify(() => documentReference.set(any())).called(1);
+      });
+    });
+
+    group('failed tests', () {
+      test('when document permission denied', () async {
+        when(() => firebaseFirestore.collection(any())).thenReturn(collectionReference);
+        when(() => collectionReference.doc(any())).thenThrow(FirebaseException(plugin: '', code: 'permission-denied'));
+
+        await expectLater(deviceDatasource.createDeviceFromPhoneNumber(phoneNumber), throwsA(isA<PermissionException>()));
+        verifyNever(() => documentReference.set(any()));
+      });
+
+      test('when other firebase exception', () async {
+        when(() => firebaseFirestore.collection(any())).thenReturn(collectionReference);
+        when(() => collectionReference.doc(any())).thenReturn(documentReference);
+        when(() => documentReference.set(any())).thenThrow(FirebaseException(plugin: ''));
+
+        await expectLater(deviceDatasource.createDeviceFromPhoneNumber(phoneNumber), throwsA(isA<DeviceGetException>()));
+        verifyNever(() => documentSnapshot.exists);
+        verifyNever(() => documentSnapshot.data());
+      });
+    });
+  });
 }
