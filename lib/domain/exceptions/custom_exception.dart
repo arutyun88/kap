@@ -35,3 +35,7 @@ class PermissionException extends CustomException {
 class DeviceGetException extends CustomException {
   const DeviceGetException(super.message);
 }
+
+class DeviceAlreadyUseException extends CustomException {
+  const DeviceAlreadyUseException(super.message);
+}

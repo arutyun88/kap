@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:kap/datasource/authorization/authorization_datasource.dart';
+import 'package:kap/datasource/device/device_datasource.dart';
 import 'package:kap/datasource/localization/local_localization_datasource.dart';
 import 'package:kap/datasource/localization/localization_datasource.dart';
 import 'package:kap/repositories/localization_repository.dart';
@@ -43,3 +45,7 @@ class FakeFirebaseUser extends Fake implements User {
   @override
   String get uid => 'some_uid';
 }
+
+class MockAuthorizationDatasource extends Mock implements AuthorizationDatasource {}
+
+class MockDeviceDatasource extends Mock implements DeviceDatasource {}
