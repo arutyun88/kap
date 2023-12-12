@@ -2,10 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:kap/datasource/authorization/authorization_datasource.dart';
+import 'package:kap/datasource/authorization/local_authorization_datasource.dart';
 import 'package:kap/datasource/device/device_datasource.dart';
 import 'package:kap/datasource/localization/local_localization_datasource.dart';
 import 'package:kap/datasource/localization/localization_datasource.dart';
 import 'package:kap/repositories/localization_repository.dart';
+import 'package:kap/services/storage/storage_service.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockRemoteLocalizationDatasource extends Mock implements LocalizationDatasource {}
@@ -50,4 +52,8 @@ class FakeFirebaseUser extends Fake implements User {
 
 class MockAuthorizationDatasource extends Mock implements AuthorizationDatasource {}
 
+class MockLocalAuthorizationDatasource extends Mock implements LocalAuthorizationDatasource {}
+
 class MockDeviceDatasource extends Mock implements DeviceDatasource {}
+
+class MockStorageService extends Mock implements StorageService {}

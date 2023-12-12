@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kap/datasource/authorization/authorization_datasource.dart';
+import 'package:kap/datasource/authorization/local_authorization_datasource.dart';
 import 'package:kap/datasource/device/device_datasource.dart';
 import 'package:kap/domain/exceptions/custom_exception.dart';
 import 'package:kap/domain/models/device_model/device_model.dart';
@@ -14,13 +15,17 @@ main() {
 
   late AuthorizationRepository authorizationRepository;
   late AuthorizationDatasource authorizationDatasource;
+  late LocalAuthorizationDatasource localAuthorizationDatasource;
   late DeviceDatasource deviceDatasource;
 
   setUp(() {
     authorizationDatasource = MockAuthorizationDatasource();
+    localAuthorizationDatasource = MockLocalAuthorizationDatasource();
     deviceDatasource = MockDeviceDatasource();
+
     authorizationRepository = AuthorizationRepository(
       remoteAuthorizationDatasource: authorizationDatasource,
+      localAuthorizationDatasource: localAuthorizationDatasource,
       deviceDatasource: deviceDatasource,
     );
     when(deviceDatasource.getDeviceByDeviceId).thenAnswer((_) => Future.value(DeviceModel.fromJson(deviceInfo)));
@@ -126,6 +131,16 @@ main() {
             smsCode: any(named: 'smsCode'),
           )).called(1);
       verifyNever(() => deviceDatasource.createDeviceFromPhoneNumber(any()));
+    });
+  });
+
+  group('checkLocalAuthState tests', () {
+    test('when user is not authorized', () async {
+      when(localAuthorizationDatasource.checkIsAuthorized).thenAnswer((_) => Future.value(false));
+
+      final actual = await authorizationRepository.checkLocalAuthState();
+
+      expect(actual, false);
     });
   });
 }
