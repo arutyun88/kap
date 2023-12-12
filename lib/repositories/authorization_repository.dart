@@ -26,4 +26,17 @@ class AuthorizationRepository {
       rethrow;
     }
   }
+
+  Future<void> codeVerification({
+    required String verificationId,
+    required String smsCode,
+    required String phoneNumber,
+  }) async {
+    try {
+      await remoteAuthorizationDatasource.verifyOtp(verificationId: verificationId, smsCode: smsCode);
+      await deviceDatasource.createDeviceFromPhoneNumber(phoneNumber);
+    } catch (_) {
+      rethrow;
+    }
+  }
 }

@@ -16,14 +16,13 @@ main() {
   late AuthorizationDatasource authorizationDatasource;
   late DeviceDatasource deviceDatasource;
 
-  setUpAll(() {
+  setUp(() {
     authorizationDatasource = MockAuthorizationDatasource();
     deviceDatasource = MockDeviceDatasource();
     authorizationRepository = AuthorizationRepository(
       remoteAuthorizationDatasource: authorizationDatasource,
       deviceDatasource: deviceDatasource,
     );
-
     when(deviceDatasource.getDeviceByDeviceId).thenAnswer((_) => Future.value(DeviceModel.fromJson(deviceInfo)));
   });
 
@@ -55,6 +54,61 @@ main() {
         authorizationRepository.phoneVerification('+12345678900', whenSuccess: (value) {}, whenFailed: (e) {}),
         throwsA(isA<DeviceAlreadyUseException>()),
       );
+    });
+  });
+
+  group('codeVerification tests', () {
+    test('when not throw exceptions', () async {
+      when(() => authorizationDatasource.verifyOtp(
+            verificationId: any(named: 'verificationId'),
+            smsCode: any(named: 'smsCode'),
+          )).thenAnswer((_) => Future.value('some_uid'));
+      when(() => deviceDatasource.createDeviceFromPhoneNumber(any())).thenAnswer((_) => Future.value());
+
+      await expectLater(
+        authorizationRepository.codeVerification(verificationId: 'id', smsCode: 'code', phoneNumber: 'number'),
+        isNot(isA<Exception>()),
+      );
+      verify(() => authorizationDatasource.verifyOtp(
+            verificationId: any(named: 'verificationId'),
+            smsCode: any(named: 'smsCode'),
+          )).called(1);
+      verify(() => deviceDatasource.createDeviceFromPhoneNumber(any())).called(1);
+    });
+
+    test('when throw device datasource exception', () async {
+      when(() => authorizationDatasource.verifyOtp(
+            verificationId: any(named: 'verificationId'),
+            smsCode: any(named: 'smsCode'),
+          )).thenAnswer((_) => Future.value('some_uid'));
+      when(() => deviceDatasource.createDeviceFromPhoneNumber(any())).thenThrow(Exception());
+
+      await expectLater(
+        authorizationRepository.codeVerification(verificationId: 'id', smsCode: 'code', phoneNumber: 'number'),
+        throwsA(isA<Exception>()),
+      );
+      verify(() => authorizationDatasource.verifyOtp(
+            verificationId: any(named: 'verificationId'),
+            smsCode: any(named: 'smsCode'),
+          )).called(1);
+      verify(() => deviceDatasource.createDeviceFromPhoneNumber(any())).called(1);
+    });
+
+    test('when throw device authorization exception', () async {
+      when(() => authorizationDatasource.verifyOtp(
+            verificationId: any(named: 'verificationId'),
+            smsCode: any(named: 'smsCode'),
+          )).thenThrow(Exception());
+
+      await expectLater(
+        authorizationRepository.codeVerification(verificationId: 'id', smsCode: 'code', phoneNumber: 'number'),
+        throwsA(isA<Exception>()),
+      );
+      verify(() => authorizationDatasource.verifyOtp(
+            verificationId: any(named: 'verificationId'),
+            smsCode: any(named: 'smsCode'),
+          )).called(1);
+      verifyNever(() => deviceDatasource.createDeviceFromPhoneNumber(any()));
     });
   });
 }
