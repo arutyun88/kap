@@ -58,22 +58,39 @@ main() {
   });
 
   group('codeVerification tests', () {
-    test('when not throw exceptions', () async {
+    test('when user is new', () async {
       when(() => authorizationDatasource.verifyOtp(
             verificationId: any(named: 'verificationId'),
             smsCode: any(named: 'smsCode'),
           )).thenAnswer((_) => Future.value(true));
       when(() => deviceDatasource.createDeviceFromPhoneNumber(any())).thenAnswer((_) => Future.value());
 
-      await expectLater(
-        authorizationRepository.codeVerification(verificationId: 'id', smsCode: 'code', phoneNumber: 'number'),
-        isNot(isA<Exception>()),
-      );
+      final actual =
+          await authorizationRepository.codeVerification(verificationId: 'id', smsCode: 'code', phoneNumber: 'number');
+
+      expect(actual, true);
       verify(() => authorizationDatasource.verifyOtp(
             verificationId: any(named: 'verificationId'),
             smsCode: any(named: 'smsCode'),
           )).called(1);
       verify(() => deviceDatasource.createDeviceFromPhoneNumber(any())).called(1);
+    });
+
+    test('when user is not new', () async {
+      when(() => authorizationDatasource.verifyOtp(
+            verificationId: any(named: 'verificationId'),
+            smsCode: any(named: 'smsCode'),
+          )).thenAnswer((_) => Future.value(false));
+
+      final actual =
+          await authorizationRepository.codeVerification(verificationId: 'id', smsCode: 'code', phoneNumber: 'number');
+
+      expect(actual, false);
+      verify(() => authorizationDatasource.verifyOtp(
+            verificationId: any(named: 'verificationId'),
+            smsCode: any(named: 'smsCode'),
+          )).called(1);
+      verifyNever(() => deviceDatasource.createDeviceFromPhoneNumber(any()));
     });
 
     test('when throw device datasource exception', () async {
