@@ -113,8 +113,7 @@ main() {
         when(() => documentReference.set(any())).thenThrow(FirebaseException(plugin: ''));
 
         await expectLater(deviceDatasource.createDeviceFromPhoneNumber(phoneNumber), throwsA(isA<DeviceGetException>()));
-        verifyNever(() => documentSnapshot.exists);
-        verifyNever(() => documentSnapshot.data());
+        verify(() => documentReference.set(any())).called(1);
       });
     });
   });
