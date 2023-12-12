@@ -27,6 +27,8 @@ class MockDatabaseReference extends Mock implements DatabaseReference {}
 
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 
+class MockAdditionalUserInfo extends Mock implements AdditionalUserInfo {}
+
 class MockFirebaseFirestore extends Mock implements FirebaseFirestore {}
 
 class MockCollectionReference extends Mock implements CollectionReference<Map<String, dynamic>> {}

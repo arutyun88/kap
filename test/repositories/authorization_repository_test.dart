@@ -62,7 +62,7 @@ main() {
       when(() => authorizationDatasource.verifyOtp(
             verificationId: any(named: 'verificationId'),
             smsCode: any(named: 'smsCode'),
-          )).thenAnswer((_) => Future.value('some_uid'));
+          )).thenAnswer((_) => Future.value(true));
       when(() => deviceDatasource.createDeviceFromPhoneNumber(any())).thenAnswer((_) => Future.value());
 
       await expectLater(
@@ -80,7 +80,7 @@ main() {
       when(() => authorizationDatasource.verifyOtp(
             verificationId: any(named: 'verificationId'),
             smsCode: any(named: 'smsCode'),
-          )).thenAnswer((_) => Future.value('some_uid'));
+          )).thenAnswer((_) => Future.value(true));
       when(() => deviceDatasource.createDeviceFromPhoneNumber(any())).thenThrow(Exception());
 
       await expectLater(

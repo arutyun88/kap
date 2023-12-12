@@ -5,7 +5,7 @@ abstract interface class AuthorizationDatasource {
     void Function(Exception) whenFailed,
   );
 
-  Future<String> verifyOtp({
+  Future<bool> verifyOtp({
     required String verificationId,
     required String smsCode,
   });

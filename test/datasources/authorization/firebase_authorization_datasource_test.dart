@@ -12,10 +12,12 @@ main() {
   late FirebaseAuthorizationDatasource firebaseAuthorizationDatasource;
   late FirebaseAuth firebaseAuth;
   late UserCredential userCredential;
+  late AdditionalUserInfo additionalUserInfo;
   late User firebaseUser;
 
   setUpAll(() {
     firebaseAuth = MockFirebaseAuth();
+    additionalUserInfo = MockAdditionalUserInfo();
     firebaseAuthorizationDatasource = FirebaseAuthorizationDatasource.init(firebaseAuth);
     userCredential = MockUserCredential();
     firebaseUser = FakeFirebaseUser();
@@ -54,8 +56,10 @@ main() {
     test('when sms-code is verified', () async {
       when(() => firebaseAuth.signInWithCredential(any())).thenAnswer((_) => Future.value(userCredential));
       when(() => userCredential.user).thenReturn(firebaseUser);
+      when(() => userCredential.additionalUserInfo).thenReturn(additionalUserInfo);
+      when(() => additionalUserInfo.isNewUser).thenReturn(true);
 
-      expect(await firebaseAuthorizationDatasource.verifyOtp(verificationId: 'id', smsCode: 'code'), isNotEmpty);
+      expect(await firebaseAuthorizationDatasource.verifyOtp(verificationId: 'id', smsCode: 'code'), true);
     });
 
     test('when sms-code is not verified', () async {
