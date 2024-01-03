@@ -7,13 +7,13 @@ class CapPhoneField extends StatelessWidget {
     super.key,
     required this.controller,
     required this.country,
-    required this.onTapToFlag,
+    required this.onChangedCountry,
     required this.onChange,
   });
 
   final TextEditingController controller;
   final CountryWithPhoneCode country;
-  final VoidCallback onTapToFlag;
+  final Function(CountryWithPhoneCode) onChangedCountry;
   final void Function(String) onChange;
 
   double _calculateTextWidth(BuildContext context, String text, TextStyle? textStyle) {
@@ -42,7 +42,7 @@ class CapPhoneField extends StatelessWidget {
         CapCountryButton(
           countryCode: country.countryCode,
           phoneCode: country.phoneCode,
-          onTap: onTapToFlag,
+          onChange: onChangedCountry,
           style: style,
         ),
         Padding(
