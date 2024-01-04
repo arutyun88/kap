@@ -7,14 +7,15 @@ class CapPhoneField extends StatelessWidget {
     super.key,
     required this.controller,
     required this.country,
-    required this.onChangedCountry,
-    required this.onChange,
+    required this.onTap,
+    this.focus,
   });
 
   final TextEditingController controller;
   final CountryWithPhoneCode country;
-  final Function(CountryWithPhoneCode) onChangedCountry;
-  final void Function(String) onChange;
+  final VoidCallback onTap;
+
+  final FocusNode? focus;
 
   double _calculateTextWidth(BuildContext context, String text, TextStyle? textStyle) {
     final TextPainter textPainter = TextPainter(
@@ -39,17 +40,13 @@ class CapPhoneField extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        CapCountryButton(
-          countryCode: country.countryCode,
-          phoneCode: country.phoneCode,
-          onChange: onChangedCountry,
-          style: style,
-        ),
+        CapCountryButton(countryCode: country.countryCode, phoneCode: country.phoneCode, onTap: onTap, style: style),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 2.0),
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: width),
             child: TextField(
+              focusNode: focus,
               controller: controller,
               enabled: true,
               onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),

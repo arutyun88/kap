@@ -48,34 +48,37 @@ abstract class _Theme {
     required Color inputDecorationBorderColor,
   }) =>
       ThemeData(
-          fontFamily: 'Red Hat Display',
-          textTheme: TextTheme(
-            displayLarge: defaultTextStyle,
-            displayMedium: defaultTextStyle,
-            displaySmall: defaultTextStyle,
-            headlineLarge: defaultTextStyle,
-            headlineMedium: defaultTextStyle,
-            headlineSmall: defaultTextStyle,
-            titleLarge: defaultTextStyle,
-            titleMedium: defaultTextStyle,
-            titleSmall: defaultTextStyle,
-            bodyLarge: defaultTextStyle,
-            bodyMedium: defaultTextStyle,
-            bodySmall: defaultTextStyle,
-            labelLarge: defaultTextStyle,
-            labelMedium: defaultTextStyle,
-            labelSmall: defaultTextStyle,
+        fontFamily: 'Red Hat Display',
+        textTheme: TextTheme(
+          displayLarge: defaultTextStyle,
+          displayMedium: defaultTextStyle,
+          displaySmall: defaultTextStyle,
+          headlineLarge: defaultTextStyle,
+          headlineMedium: defaultTextStyle,
+          headlineSmall: defaultTextStyle,
+          titleLarge: defaultTextStyle,
+          titleMedium: defaultTextStyle,
+          titleSmall: defaultTextStyle,
+          bodyLarge: defaultTextStyle,
+          bodyMedium: defaultTextStyle,
+          bodySmall: defaultTextStyle,
+          labelLarge: defaultTextStyle,
+          labelMedium: defaultTextStyle,
+          labelSmall: defaultTextStyle,
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          hintStyle: TextStyle(color: inputDecorationBorderColor),
+          contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: const BorderSide(color: Palette.accent, width: 0.5),
           ),
-          inputDecorationTheme: InputDecorationTheme(
-            hintStyle: TextStyle(color: inputDecorationBorderColor),
-            contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              borderSide: const BorderSide(color: Palette.accent, width: 0.5),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              borderSide: const BorderSide(color: Palette.accent, width: 1.0),
-            ),
-          ));
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: const BorderSide(color: Palette.accent, width: 1.0),
+          ),
+        ),
+        dividerColor: Palette.accent,
+        dividerTheme: const DividerThemeData(color: Palette.accent, thickness: 0.5, space: 0.5),
+      );
 }

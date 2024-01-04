@@ -81,4 +81,10 @@ class CustomAppLocalizations extends AppLocalizations {
 
   @override
   String get authorizationHint => _localizedStrings[_cLocale]?['authorizationHint'] ?? _default.authorizationHint;
+
+  @override
+  String get authorizationNeed => _localizedStrings[_cLocale]?['authorizationNeed'] ?? _default.authorizationNeed;
+
+  @override
+  String get authorizationCode=> _localizedStrings[_cLocale]?['authorizationCode'] ?? _default.authorizationCode;
 }

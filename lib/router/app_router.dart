@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:kap/app/modules/country/views/country_view.dart';
 import 'package:kap/app/modules/first/views/first_view.dart';
 import 'package:kap/app/modules/me/views/me_view.dart';
 import 'package:kap/app/modules/profile/views/profile_view.dart';
@@ -31,5 +32,6 @@ class AppRouter extends _$AppRouter {
             ),
           ],
         ),
+        AutoRoute(page: CountryRoute.page),
       ];
 }

@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kap/app/modules/auth/controllers/auth_controller.dart';
 import 'package:kap/app/widgets/app_bottom_sheet.dart';
-import 'package:kap/app/widgets/app_text_field.dart';
+import 'package:kap/app/widgets/cap_phone_field.dart';
 import 'package:kap/config/l10n/custom_app_localizations.dart';
 
 class AuthView extends StatelessWidget {
-  const AuthView._({Key? key}) : super(key: key);
+  const AuthView._();
 
   static Future<void> show(BuildContext context) async => await AppBottomSheet.show(
         context,
@@ -25,16 +25,25 @@ class AuthView extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             children: [
-              Text(context.dictionary.authorizationDescription, style: Theme.of(context).textTheme.bodyLarge),
+              Text(context.dictionary.authorizationNeed, style: Theme.of(context).textTheme.bodyLarge),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 24.0),
-                child: AppTextField(
-                  focusNode: controller.focusNode,
-                  onTap: controller.onTapToTextField,
-                  hintText: context.dictionary.authorizationHint,
-                  keyboardType: TextInputType.phone,
-                  controller: controller.textController,
+                child: Obx(
+                  () => CapPhoneField(
+                    country: controller.countryRes.value,
+                    onTap: controller.onTapToChange,
+                    controller: controller.textController,
+                    focus: controller.fieldFocus,
+                  ),
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24.0),
+                child: Text(context.dictionary.authorizationDescription, style: Theme.of(context).textTheme.bodyLarge),
+              ),
+              OutlinedButton(
+                onPressed: controller.onTapToSend,
+                child: Text(context.dictionary.authorizationCode, style: context.textTheme.bodyMedium),
               ),
             ],
           ),
