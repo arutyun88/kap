@@ -3,21 +3,20 @@ import 'package:kap/app/widgets/app_close_button.dart';
 
 class AppBottomSheet extends StatefulWidget {
   const AppBottomSheet._({
-    Key? key,
     required this.child,
     required this.title,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final String title;
 
-  static Future<bool> show(BuildContext context, {required Widget child, required String title}) async {
+  static Future<dynamic> show(BuildContext context, {required Widget child, required String title}) async {
     return await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
       builder: (context) => AppBottomSheet._(title: title, child: child),
-    ).then((value) => value == true);
+    );
   }
 
   @override
@@ -59,7 +58,7 @@ class _AppBottomSheetState extends State<AppBottomSheet> {
       clipBehavior: Clip.hardEdge,
       child: GestureDetector(
         onTap: () {
-          if(FocusScope.of(context).hasFocus) FocusScope.of(context).unfocus();
+          if (FocusScope.of(context).hasFocus) FocusScope.of(context).unfocus();
         },
         child: ColoredBox(
           color: Theme.of(context).scaffoldBackgroundColor,
