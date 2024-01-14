@@ -58,29 +58,6 @@ class FirstView extends StatelessWidget {
                     onPressed: () => ThemeService.to.change(null),
                     child: Text('Device', style: context.theme.textTheme.bodySmall),
                   ),
-                  ...List.generate(
-                    5,
-                    (index) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Container(
-                        height: 100,
-                        width: double.infinity,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ),
-                  const TextField(),
-                  ...List.generate(
-                    5,
-                        (index) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Container(
-                        height: 100,
-                        width: double.infinity,
-                        color: Colors.green,
-                      ),
-                    ),
-                  ),
                   SizedBox(height: WidgetsSizeService.to.bottomBarHeight.value),
                 ],
               ),

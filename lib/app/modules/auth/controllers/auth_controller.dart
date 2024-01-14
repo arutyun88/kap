@@ -12,18 +12,19 @@ class AuthController extends GetxController {
   final BuildContext context;
 
   late final TextEditingController phoneController;
+  late final TextEditingController codeController;
   late final FocusNode phoneFieldFocus;
   late final Rx<CountryWithPhoneCode> selectedCountry;
   late final RxBool sendButtonIsEnable;
 
   final verificationId = ''.obs;
-  final smsCode = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
 
     phoneController = TextEditingController();
+    codeController = TextEditingController();
     phoneFieldFocus = FocusNode();
     selectedCountry = CountryManager()
         .countries
@@ -71,5 +72,23 @@ class AuthController extends GetxController {
       context,
       whenSuccess: (newVerificationId) async => verificationId.value = newVerificationId,
     );
+  }
+
+  void onTapToSendCode() async {
+    final phone = formatNumberSync(
+      selectedCountry.value.phoneCode + phoneController.text,
+      removeCountryCodeFromResult: false,
+      phoneNumberFormat: PhoneNumberFormat.international,
+    ).replaceAll(' ', '').replaceAll('-', '');
+    if (verificationId.value.isNotEmpty && codeController.text.length == 6) {
+      await Get.find<AuthService>().verifyPhoneCode(
+        phoneNumber: phone,
+        verificationId: verificationId.value,
+        smsCode: codeController.text,
+      );
+      if (context.mounted) {
+        Navigator.of(context).pop(verificationId);
+      }
+    }
   }
 }
