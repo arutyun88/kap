@@ -11,48 +11,65 @@ class AuthController extends GetxController {
 
   final BuildContext context;
 
-  final TextEditingController textController = TextEditingController();
-  final countryRes = CountryManager()
-      .countries
-      .firstWhere((element) => element.countryCode == LocalizationService.locale.value.countryCode)
-      .obs;
+  late final TextEditingController phoneController;
+  late final FocusNode phoneFieldFocus;
+  late final Rx<CountryWithPhoneCode> selectedCountry;
+  late final RxBool sendButtonIsEnable;
+
   final verificationId = ''.obs;
+  final smsCode = ''.obs;
 
-  final FocusNode fieldFocus = FocusNode();
+  @override
+  void onInit() {
+    super.onInit();
 
-  void onTapToSend() async {
+    phoneController = TextEditingController();
+    phoneFieldFocus = FocusNode();
+    selectedCountry = CountryManager()
+        .countries
+        .firstWhere((element) => element.countryCode == LocalizationService.locale.value.countryCode)
+        .obs;
+    sendButtonIsEnable = phoneController.text.isNotEmpty.obs;
+    phoneController.addListener(_phoneFieldListener);
+  }
+
+  @override
+  void dispose() {
+    phoneController.removeListener(_phoneFieldListener);
+    phoneController.dispose();
+    super.dispose();
+  }
+
+  void _phoneFieldListener() => sendButtonIsEnable.value = phoneController.text.length ==
+      selectedCountry.value.phoneMaskFixedLineInternational
+          .substring(
+            selectedCountry.value.phoneMaskFixedLineInternational.indexOf(' '),
+            selectedCountry.value.phoneMaskFixedLineInternational.length,
+          )
+          .trim()
+          .length;
+
+  void onTapToCountry() => context.router.push(const CountryRoute()).then(
+        (value) {
+          if (value is CountryWithPhoneCode) {
+            phoneController.text = '';
+            selectedCountry.value = value;
+
+            phoneFieldFocus.requestFocus();
+          }
+        },
+      );
+
+  void onTapToReceiveVerificationCode() async {
     final phone = formatNumberSync(
-      countryRes.value.phoneCode + textController.text,
+      selectedCountry.value.phoneCode + phoneController.text,
       removeCountryCodeFromResult: false,
       phoneNumberFormat: PhoneNumberFormat.international,
     ).replaceAll(' ', '');
     await Get.find<AuthService>().sendVerificationCodeByPhoneNumber(
       phone,
       context,
-      whenSuccess: (verificationId) async {
-        print(verificationId);
-        //     await Get.find<AuthService>().verifyPhoneCode(
-        //       phoneNumber: textController.text,
-        //       verificationId: verificationId,
-        //       smsCode: '123456',
-        //     );
-        //     if (context.mounted) {
-        //       Navigator.of(context).pop(verificationId);
-        //     }
-      },
-    );
-  }
-
-  void onTapToChange() {
-    context.router.push(const CountryRoute()).then(
-      (value) {
-        if (value is CountryWithPhoneCode) {
-          textController.text = '';
-          countryRes.value = value;
-
-          fieldFocus.requestFocus();
-        }
-      },
+      whenSuccess: (newVerificationId) async => verificationId.value = newVerificationId,
     );
   }
 }
