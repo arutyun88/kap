@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kap/datasource/device/device_datasource.dart';
 import 'package:kap/datasource/device/firebase_device_datasource.dart';
+import 'package:kap/domain/exceptions/authorization_exception.dart';
 import 'package:kap/domain/exceptions/custom_exception.dart';
 import 'package:kap/domain/models/device_model/device_model.dart';
 import 'package:mocktail/mocktail.dart';
