@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kap/datasource/authorization/authorization_datasource.dart';
-import 'package:kap/domain/exceptions/custom_exception.dart';
+import 'package:kap/domain/exceptions/authorization_exception.dart';
 
 class FirebaseAuthorizationDatasource implements AuthorizationDatasource {
   final FirebaseAuth _auth;
@@ -27,15 +27,15 @@ class FirebaseAuthorizationDatasource implements AuthorizationDatasource {
       phoneNumber: phoneNumber,
       verificationCompleted: (credentials) {},
       verificationFailed: (exception) {
-        whenFailed(
-          AuthorizationException(exception.message ?? 'firebase auth exception'),
-        );
+        if (exception.code == 'too-many-requests') {
+          whenFailed(TooMachException(exception.message ?? 'firebase auth exception'));
+          return;
+        }
+        whenFailed(AuthorizationException(exception.message ?? 'firebase auth exception'));
       },
       codeSent: (verificationId, token) => whenSuccess(verificationId),
       codeAutoRetrievalTimeout: (_) {
-        whenFailed(
-          const AuthorizationTimeoutException('AuthorizationTimeoutException: authorization process times out'),
-        );
+        whenFailed(const TimeoutException('AuthorizationTimeoutException: authorization process times out'));
       },
     );
   }
@@ -50,7 +50,7 @@ class FirebaseAuthorizationDatasource implements AuthorizationDatasource {
       final user = await _auth.signInWithCredential(credential);
       return user.additionalUserInfo?.isNewUser ?? false;
     } on FirebaseAuthException catch (e) {
-      throw AuthorizationCodeException(e.message ?? 'authorization code exception');
+      throw CodeException(e.message ?? 'authorization code exception');
     } catch (e) {
       rethrow;
     }

@@ -16,22 +16,6 @@ class LocalizationDataGettingException extends LocalizationException implements 
   const LocalizationDataGettingException(super.message);
 }
 
-class AuthorizationException extends CustomException {
-  const AuthorizationException(super.message);
-}
-
-class AuthorizationTimeoutException extends AuthorizationException {
-  const AuthorizationTimeoutException(super.message);
-}
-
-class AuthorizationCodeException extends AuthorizationException {
-  const AuthorizationCodeException(super.message);
-}
-
-class PermissionException extends CustomException {
-  const PermissionException(super.message);
-}
-
 class DeviceGetException extends CustomException {
   const DeviceGetException(super.message);
 }

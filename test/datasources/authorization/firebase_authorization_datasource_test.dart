@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kap/datasource/authorization/firebase_authorization_datasource.dart';
-import 'package:kap/domain/exceptions/custom_exception.dart';
+import 'package:kap/domain/exceptions/authorization_exception.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../mocks.dart';
@@ -67,7 +67,7 @@ main() {
 
       expect(
         () => firebaseAuthorizationDatasource.verifyOtp(verificationId: 'id', smsCode: 'code'),
-        throwsA(isA<AuthorizationCodeException>()),
+        throwsA(isA<CodeException>()),
       );
     });
   });
