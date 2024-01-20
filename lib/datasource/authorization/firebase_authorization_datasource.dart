@@ -50,7 +50,13 @@ class FirebaseAuthorizationDatasource implements AuthorizationDatasource {
       final user = await _auth.signInWithCredential(credential);
       return user.additionalUserInfo?.isNewUser ?? false;
     } on FirebaseAuthException catch (e) {
-      throw CodeException(e.message ?? 'authorization code exception');
+      if (e.code == 'session-expired') {
+        throw TimeoutException(e.message ?? 'The SMS code has expired');
+      }
+      if (e.code == 'invalid-verification-code') {
+        throw CodeException(e.message ?? 'The verification code used to create the auth credential is invalid');
+      }
+      rethrow;
     } catch (e) {
       rethrow;
     }
