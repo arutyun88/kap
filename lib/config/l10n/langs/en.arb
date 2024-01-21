@@ -18,5 +18,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "sessionExpired": "The SMS code has expired",
+  "verificationCodeInvalid": "The verification code used to create the auth credential is invalid"
 }

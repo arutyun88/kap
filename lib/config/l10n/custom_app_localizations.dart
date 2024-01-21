@@ -86,5 +86,12 @@ class CustomAppLocalizations extends AppLocalizations {
   String get authorizationNeed => _localizedStrings[_cLocale]?['authorizationNeed'] ?? _default.authorizationNeed;
 
   @override
-  String get authorizationCode=> _localizedStrings[_cLocale]?['authorizationCode'] ?? _default.authorizationCode;
+  String get authorizationCode => _localizedStrings[_cLocale]?['authorizationCode'] ?? _default.authorizationCode;
+
+  @override
+  String get sessionExpired => _localizedStrings[_cLocale]?['sessionExpired'] ?? _default.sessionExpired;
+
+  @override
+  String get verificationCodeInvalid =>
+      _localizedStrings[_cLocale]?['verificationCodeInvalid'] ?? _default.verificationCodeInvalid;
 }

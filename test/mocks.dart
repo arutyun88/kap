@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:kap/datasource/authorization/authorization_datasource.dart';
 import 'package:kap/datasource/authorization/local_authorization_datasource.dart';
 import 'package:kap/datasource/device/device_datasource.dart';
 import 'package:kap/datasource/localization/local_localization_datasource.dart';
 import 'package:kap/datasource/localization/localization_datasource.dart';
+import 'package:kap/repositories/authorization_repository.dart';
 import 'package:kap/repositories/localization_repository.dart';
 import 'package:kap/services/storage/storage_service.dart';
 import 'package:mocktail/mocktail.dart';
@@ -57,3 +59,7 @@ class MockLocalAuthorizationDatasource extends Mock implements LocalAuthorizatio
 class MockDeviceDatasource extends Mock implements DeviceDatasource {}
 
 class MockStorageService extends Mock implements StorageService {}
+
+class MockAuthorizationRepository extends Mock implements AuthorizationRepository {}
+
+class FakeBuildContext extends Fake implements BuildContext {}
