@@ -32,6 +32,21 @@ main() {
     });
 
     group('success tests', () {
+      test('when phone verified', () {
+        when(
+          () => authorizationRepository.phoneVerification(
+            any(),
+            whenSuccess: any(named: 'whenSuccess'),
+            whenFailed: any(named: 'whenFailed'),
+          ),
+        ).thenAnswer((_) => Future.value());
+
+        expect(
+          authService.sendVerificationCodeByPhoneNumber('', context, whenSuccess: (value) {}, whenFailed: (exc) {}),
+          isNot(isA<Exception>),
+        );
+      });
+
       test('when sms code verified', () async {
         when(
           () => authorizationRepository.codeVerification(

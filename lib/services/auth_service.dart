@@ -17,6 +17,19 @@ class AuthService extends GetxService {
   final Rx<bool> isAuthorized;
   final AuthorizationRepository _authorizationRepository;
 
+  Future<void> sendVerificationCodeByPhoneNumber(
+    String phoneNumber,
+    BuildContext context, {
+    required Function(String) whenSuccess,
+    required Function(Exception) whenFailed,
+  }) async {
+    await _authorizationRepository.phoneVerification(
+      phoneNumber.phoneForSaveCondition,
+      whenSuccess: whenSuccess,
+      whenFailed: whenFailed,
+    );
+  }
+
   Future<VerifyCodeState> verifyPhoneCode(
     BuildContext context, {
     required String phoneNumber,
