@@ -69,7 +69,8 @@ main() {
     });
 
     test('when sms-code is not verified', () async {
-      when(() => firebaseAuth.signInWithCredential(any())).thenThrow(FirebaseAuthException(code: '100'));
+      when(() => firebaseAuth.signInWithCredential(any()))
+          .thenThrow(FirebaseAuthException(code: 'invalid-verification-code'));
 
       expect(
         () => firebaseAuthorizationDatasource.verifyOtp(verificationId: 'id', smsCode: 'code'),

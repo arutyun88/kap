@@ -12,6 +12,7 @@ import 'package:kap/datasource/authorization/hive_authorization_datasource.dart'
 import 'package:kap/datasource/device/firebase_device_datasource.dart';
 import 'package:kap/datasource/localization/firebase_localization_datasource.dart';
 import 'package:kap/datasource/localization/hive_localization_datasource.dart';
+import 'package:kap/datasource/user/firebase_user_datasource.dart';
 import 'package:kap/repositories/authorization_repository.dart';
 import 'package:kap/repositories/localization_repository.dart';
 import 'package:kap/services/environment_service.dart';
@@ -48,6 +49,7 @@ Future<void> _initServices({required Environment env}) async {
       remoteAuthorizationDatasource: FirebaseAuthorizationDatasource.init(FirebaseAuth.instance),
       localAuthorizationDatasource: HiveAuthorizationDatasource(),
       deviceDatasource: FirebaseDeviceDatasource.init(FirebaseFirestore.instance),
+      userDatasource: FirebaseUserDatasource.init(FirebaseFirestore.instance),
     ),
   );
   LaunchTrackerService.to.stopService('AuthService');

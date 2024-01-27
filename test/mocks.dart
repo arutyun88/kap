@@ -7,6 +7,7 @@ import 'package:kap/datasource/authorization/local_authorization_datasource.dart
 import 'package:kap/datasource/device/device_datasource.dart';
 import 'package:kap/datasource/localization/local_localization_datasource.dart';
 import 'package:kap/datasource/localization/localization_datasource.dart';
+import 'package:kap/datasource/user/user_datasource.dart';
 import 'package:kap/repositories/authorization_repository.dart';
 import 'package:kap/repositories/localization_repository.dart';
 import 'package:kap/services/storage/storage_service.dart';
@@ -60,6 +61,8 @@ class MockAuthorizationDatasource extends Mock implements AuthorizationDatasourc
 class MockLocalAuthorizationDatasource extends Mock implements LocalAuthorizationDatasource {}
 
 class MockDeviceDatasource extends Mock implements DeviceDatasource {}
+
+class MockUserDatasource extends Mock implements UserDatasource {}
 
 class MockStorageService extends Mock implements StorageService {}
 

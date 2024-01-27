@@ -2,9 +2,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:kap/datasource/authorization/authorization_datasource.dart';
 import 'package:kap/datasource/authorization/local_authorization_datasource.dart';
 import 'package:kap/datasource/device/device_datasource.dart';
+import 'package:kap/datasource/user/user_datasource.dart';
 import 'package:kap/domain/exceptions/custom_exception.dart';
+import 'package:kap/domain/exceptions/user_exception.dart';
 import 'package:kap/domain/models/device_model/device_model.dart';
 import 'package:kap/domain/models/user_auth_model/user_auth_model.dart';
+import 'package:kap/domain/models/user_model/user_model.dart';
 import 'package:kap/repositories/authorization_repository.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -18,16 +21,19 @@ main() {
   late AuthorizationDatasource authorizationDatasource;
   late LocalAuthorizationDatasource localAuthorizationDatasource;
   late DeviceDatasource deviceDatasource;
+  late UserDatasource userDatasource;
 
   setUp(() {
     authorizationDatasource = MockAuthorizationDatasource();
     localAuthorizationDatasource = MockLocalAuthorizationDatasource();
     deviceDatasource = MockDeviceDatasource();
+    userDatasource = MockUserDatasource();
 
     authorizationRepository = AuthorizationRepository(
       remoteAuthorizationDatasource: authorizationDatasource,
       localAuthorizationDatasource: localAuthorizationDatasource,
       deviceDatasource: deviceDatasource,
+      userDatasource: userDatasource,
     );
     when(deviceDatasource.getDeviceByDeviceId).thenAnswer((_) => Future.value(DeviceModel.fromJson(deviceInfo)));
   });
@@ -70,6 +76,7 @@ main() {
             smsCode: any(named: 'smsCode'),
           )).thenAnswer((_) => Future.value(const UserAuthModel(isNewUser: true, uid: '', phoneNumber: '')));
       when(() => deviceDatasource.createDeviceFromPhoneNumber(any())).thenAnswer((_) => Future.value());
+      when(() => userDatasource.getUserByUid(any())).thenAnswer((_) => Future.value(UserModel.fromJson(userInfo)));
 
       final actual =
           await authorizationRepository.codeVerification(verificationId: 'id', smsCode: 'code', phoneNumber: 'number');
@@ -87,6 +94,7 @@ main() {
             verificationId: any(named: 'verificationId'),
             smsCode: any(named: 'smsCode'),
           )).thenAnswer((_) => Future.value(const UserAuthModel(isNewUser: false, uid: '', phoneNumber: '')));
+      when(() => userDatasource.getUserByUid(any())).thenAnswer((_) => Future.value(UserModel.fromJson(userInfo)));
 
       final actual =
           await authorizationRepository.codeVerification(verificationId: 'id', smsCode: 'code', phoneNumber: 'number');
@@ -97,6 +105,19 @@ main() {
             smsCode: any(named: 'smsCode'),
           )).called(1);
       verifyNever(() => deviceDatasource.createDeviceFromPhoneNumber(any()));
+    });
+
+    test('when user is not new and user is not found', () async {
+      when(() => authorizationDatasource.verifyOtp(
+            verificationId: any(named: 'verificationId'),
+            smsCode: any(named: 'smsCode'),
+          )).thenAnswer((_) => Future.value(const UserAuthModel(isNewUser: false, uid: '', phoneNumber: '')));
+      when(() => userDatasource.getUserByUid(any())).thenThrow(UserNotFoundException());
+
+      final actual =
+          await authorizationRepository.codeVerification(verificationId: 'id', smsCode: 'code', phoneNumber: 'number');
+
+      expect(actual, true);
     });
 
     test('when throw device datasource exception', () async {
