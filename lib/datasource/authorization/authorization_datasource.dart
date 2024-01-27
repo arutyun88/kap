@@ -1,3 +1,5 @@
+import 'package:kap/domain/models/user_auth_model/user_auth_model.dart';
+
 abstract interface class AuthorizationDatasource {
   Future<void> phoneVerification(
     String phoneNumber,
@@ -5,7 +7,7 @@ abstract interface class AuthorizationDatasource {
     void Function(Exception) whenFailed,
   );
 
-  Future<bool> verifyOtp({
+  Future<UserAuthModel> verifyOtp({
     required String verificationId,
     required String smsCode,
   });

@@ -4,6 +4,7 @@ import 'package:kap/datasource/authorization/local_authorization_datasource.dart
 import 'package:kap/datasource/device/device_datasource.dart';
 import 'package:kap/domain/exceptions/custom_exception.dart';
 import 'package:kap/domain/models/device_model/device_model.dart';
+import 'package:kap/domain/models/user_auth_model/user_auth_model.dart';
 import 'package:kap/repositories/authorization_repository.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -67,7 +68,7 @@ main() {
       when(() => authorizationDatasource.verifyOtp(
             verificationId: any(named: 'verificationId'),
             smsCode: any(named: 'smsCode'),
-          )).thenAnswer((_) => Future.value(true));
+          )).thenAnswer((_) => Future.value(const UserAuthModel(isNewUser: true, uid: '', phoneNumber: '')));
       when(() => deviceDatasource.createDeviceFromPhoneNumber(any())).thenAnswer((_) => Future.value());
 
       final actual =
@@ -85,7 +86,7 @@ main() {
       when(() => authorizationDatasource.verifyOtp(
             verificationId: any(named: 'verificationId'),
             smsCode: any(named: 'smsCode'),
-          )).thenAnswer((_) => Future.value(false));
+          )).thenAnswer((_) => Future.value(const UserAuthModel(isNewUser: false, uid: '', phoneNumber: '')));
 
       final actual =
           await authorizationRepository.codeVerification(verificationId: 'id', smsCode: 'code', phoneNumber: 'number');
@@ -102,7 +103,7 @@ main() {
       when(() => authorizationDatasource.verifyOtp(
             verificationId: any(named: 'verificationId'),
             smsCode: any(named: 'smsCode'),
-          )).thenAnswer((_) => Future.value(true));
+          )).thenAnswer((_) => Future.value(const UserAuthModel(isNewUser: true, uid: '', phoneNumber: '')));
       when(() => deviceDatasource.createDeviceFromPhoneNumber(any())).thenThrow(Exception());
 
       await expectLater(

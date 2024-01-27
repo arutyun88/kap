@@ -54,12 +54,12 @@ class AuthorizationRepository {
     required String phoneNumber,
   }) async {
     try {
-      final isNewUser =
+      final userModel =
           await _remoteAuthorizationDatasource.verifyOtp(verificationId: verificationId, smsCode: smsCode);
-      if (isNewUser) {
+      if (userModel.isNewUser) {
         await _deviceDatasource.createDeviceFromPhoneNumber(phoneNumber);
       }
-      return isNewUser;
+      return userModel.isNewUser;
     } catch (_) {
       rethrow;
     }

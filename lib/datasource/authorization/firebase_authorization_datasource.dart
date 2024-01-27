@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kap/datasource/authorization/authorization_datasource.dart';
 import 'package:kap/domain/exceptions/authorization_exception.dart';
+import 'package:kap/domain/models/user_auth_model/user_auth_model.dart';
 
 class FirebaseAuthorizationDatasource implements AuthorizationDatasource {
   final FirebaseAuth _auth;
@@ -41,14 +42,18 @@ class FirebaseAuthorizationDatasource implements AuthorizationDatasource {
   }
 
   @override
-  Future<bool> verifyOtp({
+  Future<UserAuthModel> verifyOtp({
     required String verificationId,
     required String smsCode,
   }) async {
     final credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
     try {
       final user = await _auth.signInWithCredential(credential);
-      return user.additionalUserInfo?.isNewUser ?? false;
+      return UserAuthModel(
+        isNewUser: user.additionalUserInfo?.isNewUser ?? false,
+        uid: user.user?.uid ?? '',
+        phoneNumber: user.user?.phoneNumber ?? '',
+      );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'session-expired') {
         throw TimeoutException(e.message ?? 'The SMS code has expired');

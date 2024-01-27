@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kap/datasource/authorization/firebase_authorization_datasource.dart';
 import 'package:kap/domain/exceptions/authorization_exception.dart';
+import 'package:kap/domain/models/user_auth_model/user_auth_model.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../mocks.dart';
@@ -59,7 +60,12 @@ main() {
       when(() => userCredential.additionalUserInfo).thenReturn(additionalUserInfo);
       when(() => additionalUserInfo.isNewUser).thenReturn(true);
 
-      expect(await firebaseAuthorizationDatasource.verifyOtp(verificationId: 'id', smsCode: 'code'), true);
+      final actual = await firebaseAuthorizationDatasource.verifyOtp(verificationId: 'id', smsCode: 'code');
+
+      expect(actual, isA<UserAuthModel>());
+      expect(actual.uid, firebaseUser.uid);
+      expect(actual.phoneNumber, firebaseUser.phoneNumber);
+      expect(actual.isNewUser, true);
     });
 
     test('when sms-code is not verified', () async {

@@ -50,6 +50,9 @@ class FakeAuthCredential extends Fake implements AuthCredential {}
 class FakeFirebaseUser extends Fake implements User {
   @override
   String get uid => 'some_uid';
+
+  @override
+  String get phoneNumber => 'some_phoneNumber';
 }
 
 class MockAuthorizationDatasource extends Mock implements AuthorizationDatasource {}
