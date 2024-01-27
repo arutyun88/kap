@@ -94,4 +94,7 @@ class CustomAppLocalizations extends AppLocalizations {
   @override
   String get verificationCodeInvalid =>
       _localizedStrings[_cLocale]?['verificationCodeInvalid'] ?? _default.verificationCodeInvalid;
+
+  @override
+  String get closeButtonTitle => _localizedStrings[_cLocale]?['closeButtonTitle'] ?? _default.closeButtonTitle;
 }
