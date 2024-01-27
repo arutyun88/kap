@@ -6,6 +6,7 @@ import 'package:kap/app/widgets/app_shader_scaffold.dart';
 import 'package:kap/config/l10n/custom_app_localizations.dart';
 import 'package:kap/config/palette/palette.dart';
 import 'package:kap/config/theme/app_theme.dart';
+import 'package:kap/services/auth_service.dart';
 import 'package:kap/services/settings/theme_service.dart';
 import 'package:kap/services/widgets_size_service.dart';
 
@@ -59,6 +60,14 @@ class FirstView extends StatelessWidget {
                     child: Text('Device', style: context.theme.textTheme.bodySmall),
                   ),
                   SizedBox(height: WidgetsSizeService.to.bottomBarHeight.value),
+                  Obx(
+                    () => AuthService.to.isAuthorized.value
+                        ? ElevatedButton(
+                            onPressed: () => AuthService.to.isAuthorized.value = false,
+                            child: Text('LogOut', style: context.theme.textTheme.bodySmall),
+                          )
+                        : const SizedBox(),
+                  ),
                 ],
               ),
             ),

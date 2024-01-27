@@ -9,7 +9,7 @@ class AuthService extends GetxService {
 
   static Future<void> init(AuthorizationRepository authorizationRepository) async {
     final bool authorized = await authorizationRepository.checkLocalAuthState();
-    Get.put(AuthService._(authorized.obs, authorizationRepository));
+    Get.put(AuthService._(authorized.obs, authorizationRepository)).stateListener();
   }
 
   static AuthService get to => Get.find<AuthService>();
@@ -43,7 +43,6 @@ class AuthService extends GetxService {
         phoneNumber: phoneNumber.phoneForSaveCondition,
       );
       isAuthorized.value = true;
-      _authorizationRepository.setLocalAuthState(isAuthorized.value);
       return verifiedAsNewUser ? VerifyCodeState.verifiedNewUser : VerifyCodeState.verifiedOldUser;
     } on CodeException catch (_) {
       return VerifyCodeState.error;
@@ -51,6 +50,10 @@ class AuthService extends GetxService {
       return VerifyCodeState.expired;
     }
   }
+
+  void logOut() => isAuthorized.value = false;
+
+  void stateListener() => isAuthorized.listen((state) => _authorizationRepository.setLocalAuthState(state));
 }
 
 extension _PhoneExtension on String {
