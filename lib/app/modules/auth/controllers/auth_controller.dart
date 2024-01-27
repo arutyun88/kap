@@ -2,6 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 import 'package:get/get.dart';
+import 'package:kap/app/widgets/app_dialog.dart';
+import 'package:kap/config/l10n/custom_app_localizations.dart';
+import 'package:kap/domain/enums/verify_code_state.dart';
 import 'package:kap/domain/exceptions/authorization_exception.dart';
 import 'package:kap/domain/exceptions/custom_exception.dart';
 import 'package:kap/router/app_router.dart';
@@ -91,45 +94,30 @@ class AuthController extends GetxController {
       selectedCountry.value.phoneCode + phoneController.text,
       removeCountryCodeFromResult: false,
       phoneNumberFormat: PhoneNumberFormat.international,
-    ).replaceAll(' ', '').replaceAll('-', '');
+    );
     if (verificationId.value.isNotEmpty && codeController.text.length == 6) {
-      await Get.find<AuthService>().verifyPhoneCode(
+      final verified = await Get.find<AuthService>().verifyPhoneCode(
+        context,
         phoneNumber: phone,
         verificationId: verificationId.value,
         smsCode: codeController.text,
       );
-      if (context.mounted) {
-        Navigator.of(context).pop(verificationId);
-      }
+      _verifiedStateMapping(verified);
     }
   }
 
-  void _showDialog(String message) async {
+  void _verifiedStateMapping(VerifyCodeState verifiedState) {
     if (!context.mounted) return;
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return Center(
-          child: Container(
-            margin: const EdgeInsets.all(16.0),
-            padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-              color: context.theme.scaffoldBackgroundColor,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(message, style: context.textTheme.bodyMedium),
-                Padding(
-                  padding: const EdgeInsets.only(top: 24.0),
-                  child: OutlinedButton(onPressed: Navigator.of(context).pop, child: const Text('close')),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
+    switch (verifiedState) {
+      case VerifyCodeState.expired:
+        _showDialog(context.dictionary.sessionExpired);
+      case VerifyCodeState.error:
+        _showDialog(context.dictionary.verificationCodeInvalid);
+      case VerifyCodeState.verifiedOldUser:
+      case VerifyCodeState.verifiedNewUser:
+        Navigator.of(context).pop(verificationId);
+    }
   }
+
+  void _showDialog(String message) => AppDialog.error(context, message: message);
 }
