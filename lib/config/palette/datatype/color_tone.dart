@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:kap/config/palette/datatype/color_type.dart';
+import 'package:kap/config/theme/theme_scheme.dart';
 
-class ColorTone extends ColorSwatch<ColorType> {
+class ColorTone extends ColorSwatch<ThemeScheme> {
   const ColorTone(super.primary, super.swatch);
 
-  Color get dark => this[ColorType.dark]!;
+  Color get dark => this[ThemeScheme.dark]!;
 
-  Color get medium => this[ColorType.medium]!;
-
-  Color get light => this[ColorType.light]!;
+  Color get light => this[ThemeScheme.light]!;
 }
