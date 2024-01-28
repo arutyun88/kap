@@ -20,6 +20,13 @@ class AppTheme {
           dragHandleColor: Palette.main.grabber.light,
           modalBackgroundColor: Colors.transparent,
         ),
+        buttonTheme: ButtonThemeData(
+          splashColor: Colors.red,
+          colorScheme: ColorScheme.light(
+            primary: Palette.main.primary.light,
+            secondary: Palette.main.secondary.light,
+          ),
+        ),
       );
 
   static ThemeData get dark => _Theme.theme(
@@ -38,6 +45,12 @@ class AppTheme {
         bottomSheetTheme: BottomSheetThemeData(
           dragHandleColor: Palette.main.grabber.dark,
           modalBackgroundColor: Colors.transparent,
+        ),
+        buttonTheme: ButtonThemeData(
+          colorScheme: ColorScheme.light(
+            primary: Palette.main.primary.dark,
+            secondary: Palette.main.secondary.dark,
+          ),
         ),
       );
 }
@@ -81,4 +94,8 @@ abstract class _Theme {
         dividerColor: Palette.accent,
         dividerTheme: const DividerThemeData(color: Palette.accent, thickness: 0.5, space: 0.5),
       );
+}
+
+extension ThemeDataExtension on ThemeData {
+  Color get accent => Palette.accent;
 }

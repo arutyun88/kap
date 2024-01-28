@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:flutter/material.dart';
 import 'package:kap/config/palette/datatype/color_tone.dart';
 import 'package:kap/config/theme/theme_scheme.dart';
 
@@ -12,7 +11,7 @@ class MainPalette {
     },
   );
 
-  final ColorTone grabber =  ColorTone(
+  final ColorTone grabber = ColorTone(
     0xFFFFFFFF,
     <ThemeScheme, Color>{
       ThemeScheme.dark: const Color(0xFFEBEBF5).withOpacity(.3),
@@ -20,7 +19,7 @@ class MainPalette {
     },
   );
 
-  final ColorTone hint =  ColorTone(
+  final ColorTone hint = ColorTone(
     0xFFFFFFFF,
     <ThemeScheme, Color>{
       ThemeScheme.dark: const Color(0xFFEBEBF5).withOpacity(.5),
@@ -36,11 +35,11 @@ class MainPalette {
     },
   );
 
-  final ColorTone secondary = const ColorTone(
+  final ColorTone secondary = ColorTone(
     0xFF172D2E,
     <ThemeScheme, Color>{
-      ThemeScheme.dark: Color(0xFF172D2E),
-      ThemeScheme.light: Color(0xFF44868A),
+      ThemeScheme.dark: Colors.grey.withOpacity(.2),
+      ThemeScheme.light: Colors.grey.withOpacity(.3),
     },
   );
 
