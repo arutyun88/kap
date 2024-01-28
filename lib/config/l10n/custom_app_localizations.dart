@@ -96,5 +96,17 @@ class CustomAppLocalizations extends AppLocalizations {
       _localizedStrings[_cLocale]?['verificationCodeInvalid'] ?? _default.verificationCodeInvalid;
 
   @override
-  String get closeButtonTitle => _localizedStrings[_cLocale]?['closeButtonTitle'] ?? _default.closeButtonTitle;
+  String get cancelButtonTitle => _localizedStrings[_cLocale]?['cancelButtonTitle'] ?? _default.cancelButtonTitle;
+
+  @override
+  String get continueButtonTitle => _localizedStrings[_cLocale]?['continueButtonTitle'] ?? _default.continueButtonTitle;
+
+  @override
+  String get registrationIncompleteExitPrompt =>
+      _localizedStrings[_cLocale]?['registrationIncompleteExitPrompt']?.multiline ??
+      _default.registrationIncompleteExitPrompt;
+}
+
+extension _StringExtension on String {
+  String get multiline => replaceAll(r'\n', '\n');
 }

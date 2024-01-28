@@ -21,5 +21,7 @@
   },
   "sessionExpired": "The SMS code has expired",
   "verificationCodeInvalid": "The verification code used to create the auth credential is invalid",
-  "closeButtonTitle": "Close"
+  "registrationIncompleteExitPrompt": "Leaving without completing the registration?\nFill in all the fields, and you won't have to log in again.",
+  "cancelButtonTitle": "Cancel",
+  "continueButtonTitle": "Yes, close"
 }
