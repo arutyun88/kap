@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kap/app/modules/first/controllers/first_controller.dart';
+import 'package:kap/app/widgets/app_button.dart';
 import 'package:kap/app/widgets/app_shader_scaffold.dart';
 import 'package:kap/config/l10n/custom_app_localizations.dart';
 import 'package:kap/config/palette/palette.dart';
@@ -31,13 +32,14 @@ class FirstView extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(height: context.mediaQueryPadding.top),
-                  ElevatedButton(
-                    onPressed: controller.goToSecondPage,
-                    child: Text('GO TO SECOND PAGE', style: context.theme.textTheme.bodySmall),
-                  ),
-                  ElevatedButton(
-                    onPressed: controller.goToProfilePage,
-                    child: Text('GO TO PROFILE', style: context.theme.textTheme.bodySmall),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Row(
+                      children: [
+                        Flexible(child: AppButton.accent(onTap: controller.goToSecondPage, title: 'GO TO SECOND PAGE')),
+                        Flexible(child: AppButton.accent(onTap: controller.goToProfilePage, title: 'GO TO PROFILE')),
+                      ],
+                    ),
                   ),
                   Text(
                     context.dictionary.language,
@@ -47,26 +49,61 @@ class FirstView extends StatelessWidget {
                     context.dictionary.helloWithUsername('some'),
                     style: context.theme.textTheme.bodySmall?.copyWith(color: Palette.support.warning.light),
                   ),
-                  ElevatedButton(
-                    onPressed: () => ThemeService.to.change(AppTheme.light),
-                    child: Text('Light', style: context.theme.textTheme.bodySmall),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: ThemeService.to.theme.value == AppTheme.light
+                              ? AppButton.accent(
+                                  onTap: () => ThemeService.to.change(AppTheme.light),
+                                  title: 'Light',
+                                )
+                              : AppButton.secondary(
+                                  onTap: () => ThemeService.to.change(AppTheme.light),
+                                  title: 'Light',
+                                ),
+                        ),
+                        Flexible(
+                          child: ThemeService.to.theme.value == AppTheme.dark
+                              ? AppButton.accent(
+                                  onTap: () => ThemeService.to.change(AppTheme.dark),
+                                  title: 'Dark',
+                                )
+                              : AppButton.secondary(
+                                  onTap: () => ThemeService.to.change(AppTheme.dark),
+                                  title: 'Dark',
+                                ),
+                        ),
+                      ],
+                    ),
                   ),
-                  ElevatedButton(
-                    onPressed: () => ThemeService.to.change(AppTheme.dark),
-                    child: Text('Dark', style: context.theme.textTheme.bodySmall),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => ThemeService.to.change(null),
-                    child: Text('Device', style: context.theme.textTheme.bodySmall),
+                  AppButton.secondary(
+                    onTap: () => ThemeService.to.change(null),
+                    title: 'Device',
                   ),
                   SizedBox(height: WidgetsSizeService.to.bottomBarHeight.value),
                   Obx(
-                    () => AuthService.to.isAuthorized.value
-                        ? ElevatedButton(
-                            onPressed: () => AuthService.to.isAuthorized.value = false,
-                            child: Text('LogOut', style: context.theme.textTheme.bodySmall),
-                          )
-                        : const SizedBox(),
+                    () => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Column(
+                        children: [
+                          Text(
+                            'authorized: ${AuthService.to.isAuthorized.value}',
+                            style: context.theme.textTheme.bodySmall,
+                          ),
+                          AuthService.to.isAuthorized.value
+                              ? AppButton.secondary(
+                                  onTap: () => AuthService.to.isAuthorized.value = false,
+                                  title: 'LogOut',
+                                )
+                              : AppButton.accent(
+                                  onTap: () => AuthService.to.isAuthorized.value = true,
+                                  title: 'LogIn',
+                                ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
