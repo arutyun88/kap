@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:kap/datasource/authorization/authorization_datasource.dart';
 import 'package:kap/datasource/authorization/local_authorization_datasource.dart';
 import 'package:kap/datasource/device/device_datasource.dart';
@@ -55,6 +56,8 @@ class FakeFirebaseUser extends Fake implements User {
   @override
   String get phoneNumber => 'some_phoneNumber';
 }
+
+class MockInternetConnectionChecker extends Mock implements InternetConnectionChecker {}
 
 class MockAuthorizationDatasource extends Mock implements AuthorizationDatasource {}
 

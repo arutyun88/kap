@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:kap/config/l10n/custom_app_localizations.dart';
 import 'package:kap/datasource/localization/local_localization_datasource.dart';
 import 'package:kap/datasource/localization/localization_datasource.dart';
@@ -18,103 +19,81 @@ main() {
   late LocalizationRepository localizationRepository;
   late LocalLocalizationDatasource localLocalizationDatasource;
   late LocalizationDatasource remoteLocalizationDatasource;
-  late Map<String, Map<String, String>> localizationMap;
+  late InternetConnectionChecker connectionChecker;
+  late Map<String, Map<String, String>> localizations;
 
   setUpAll(() async {
-    localizationMap =
+    connectionChecker = MockInternetConnectionChecker();
+    localizations =
         (jsonDecode(await File('test/resources/localization_test_file.json').readAsString())['data'] as Map).convertTo;
     localLocalizationDatasource = MockLocalLocalizationDatasource();
     remoteLocalizationDatasource = MockRemoteLocalizationDatasource();
     localizationRepository = LocalizationRepository(
       localLocalizationDatasource: localLocalizationDatasource,
       remoteLocalizationDatasource: remoteLocalizationDatasource,
+      internetConnectionChecker: connectionChecker,
     );
   });
 
-  group('localization repository tests', () {
-    group('localization repository success tests', () {
-      test('localization repository success when local and remote versions are the same', () async {
+  group('checkAndUpdateLocalization tests', () {
+    group('success tests', () {
+      setUpAll(() {
         when(localLocalizationDatasource.getVersion).thenAnswer((_) => Future.value(1));
+        when(() => connectionChecker.hasConnection).thenAnswer((_) => Future.value(true));
+        when(localLocalizationDatasource.getData).thenAnswer((_) => Future.value(localizations));
+      });
+
+      tearDown(() => resetMocktailState());
+
+      test('localization repository success when local and remote versions are the same', () async {
         when(remoteLocalizationDatasource.getVersion).thenAnswer((_) => Future.value(1));
-        when(localLocalizationDatasource.getData).thenAnswer((_) => Future.value(localizationMap));
 
         await localizationRepository.checkAndUpdateLocalization();
 
-        verify(() => localLocalizationDatasource.getVersion()).called(1);
         verify(() => remoteLocalizationDatasource.getVersion()).called(1);
-        verify(() => localLocalizationDatasource.getData()).called(1);
+        verify(() => localLocalizationDatasource.getVersion()).called(1);
         verifyNever(() => remoteLocalizationDatasource.getData());
+        verifyNever(() => localLocalizationDatasource.setData(any(), any()));
+        verify(() => localLocalizationDatasource.getData()).called(1);
       });
 
       test('localization repository success when local and remote versions do not match', () async {
-        when(localLocalizationDatasource.getVersion).thenAnswer((_) => Future.value(1));
         when(remoteLocalizationDatasource.getVersion).thenAnswer((_) => Future.value(2));
-        when(remoteLocalizationDatasource.getData).thenAnswer((_) => Future.value(localizationMap));
+        when(remoteLocalizationDatasource.getData).thenAnswer((_) => Future.value(localizations));
+        when(() => localLocalizationDatasource.setData(any(), any())).thenAnswer((_) => Future.value());
 
         await localizationRepository.checkAndUpdateLocalization();
 
-        verify(() => localLocalizationDatasource.getVersion()).called(1);
         verify(() => remoteLocalizationDatasource.getVersion()).called(1);
-        verifyNever(() => localLocalizationDatasource.getData());
+        verify(() => localLocalizationDatasource.getVersion()).called(1);
         verify(() => remoteLocalizationDatasource.getData()).called(1);
+        verify(() => localLocalizationDatasource.setData(any(), any())).called(1);
+        verify(() => localLocalizationDatasource.getData()).called(1);
       });
     });
 
-    group('localization repository failed tests', () {
-      test('localization repository throws an exception when checking the local version', () async {
-        when(localLocalizationDatasource.getVersion).thenThrow(
+    group('failed tests', () {
+      test('localization repository throws an exception when checking the remote version', () async {
+        when(remoteLocalizationDatasource.getVersion).thenThrow(
           const LocalizationVersionCheckException('an error occurred while checking the local version'),
         );
+        when(() => connectionChecker.hasConnection).thenAnswer((_) => Future.value(true));
 
         await expectLater(
           localizationRepository.checkAndUpdateLocalization,
           throwsA(isA<LocalizationVersionCheckException>()),
         );
-
-        verify(() => localLocalizationDatasource.getVersion()).called(1);
-        verifyNever(() => remoteLocalizationDatasource.getVersion());
+        verify(() => remoteLocalizationDatasource.getVersion()).called(1);
+        verifyNever(() => localLocalizationDatasource.getVersion());
+        verifyNever(() => remoteLocalizationDatasource.getData());
+        verifyNever(() => localLocalizationDatasource.setData(any(), any()));
         verifyNever(() => localLocalizationDatasource.getData());
-        verifyNever(() => remoteLocalizationDatasource.getData());
-      });
-
-      test('localization repository throws an exception when checking the remote version', () async {
-        when(localLocalizationDatasource.getVersion).thenAnswer((_) => Future.value(1));
-        when(remoteLocalizationDatasource.getVersion).thenThrow(
-          const LocalizationVersionCheckException('an error occurred while checking the remote version'),
-        );
-
-        await expectLater(
-          localizationRepository.checkAndUpdateLocalization,
-          throwsA(isA<LocalizationVersionCheckException>()),
-        );
-
-        verify(localLocalizationDatasource.getVersion).called(1);
-        verify(remoteLocalizationDatasource.getVersion).called(1);
-        verifyNever(() => localLocalizationDatasource.getData());
-        verifyNever(() => remoteLocalizationDatasource.getData());
-      });
-
-      test('localization repository throws an exception when receive data from local storage', () async {
-        when(localLocalizationDatasource.getVersion).thenAnswer((_) => Future.value(1));
-        when(remoteLocalizationDatasource.getVersion).thenAnswer((_) => Future.value(1));
-        when(localLocalizationDatasource.getData).thenThrow(
-          const LocalizationDataGettingException('an error occurred while retrieving data from the local storage'),
-        );
-
-        await expectLater(
-          localizationRepository.checkAndUpdateLocalization,
-          throwsA(isA<LocalizationDataGettingException>()),
-        );
-
-        verify(localLocalizationDatasource.getVersion).called(1);
-        verify(remoteLocalizationDatasource.getVersion).called(1);
-        verify(() => localLocalizationDatasource.getData()).called(1);
-        verifyNever(() => remoteLocalizationDatasource.getData());
       });
 
       test('localization repository throws an exception when receive data from remote storage', () async {
-        when(localLocalizationDatasource.getVersion).thenAnswer((_) => Future.value(1));
+        when(() => connectionChecker.hasConnection).thenAnswer((_) => Future.value(true));
         when(remoteLocalizationDatasource.getVersion).thenAnswer((_) => Future.value(2));
+        when(localLocalizationDatasource.getVersion).thenAnswer((_) => Future.value(1));
         when(remoteLocalizationDatasource.getData).thenThrow(
           const LocalizationDataGettingException('an error occurred while retrieving data from the remote storage'),
         );
@@ -123,11 +102,30 @@ main() {
           localizationRepository.checkAndUpdateLocalization,
           throwsA(isA<LocalizationDataGettingException>()),
         );
-
-        verify(localLocalizationDatasource.getVersion).called(1);
-        verify(remoteLocalizationDatasource.getVersion).called(1);
+        verify(() => remoteLocalizationDatasource.getVersion()).called(1);
+        verify(() => localLocalizationDatasource.getVersion()).called(1);
         verify(() => remoteLocalizationDatasource.getData()).called(1);
+        verifyNever(() => localLocalizationDatasource.setData(any(), any()));
         verifyNever(() => localLocalizationDatasource.getData());
+      });
+
+      test('localization repository throws an exception when receive data from local storage', () async {
+        when(() => connectionChecker.hasConnection).thenAnswer((_) => Future.value(true));
+        when(remoteLocalizationDatasource.getVersion).thenAnswer((_) => Future.value(1));
+        when(localLocalizationDatasource.getVersion).thenAnswer((_) => Future.value(1));
+        when(localLocalizationDatasource.getData).thenThrow(
+          const LocalizationDataGettingException('an error occurred while retrieving data from the local storage'),
+        );
+
+        await expectLater(
+          localizationRepository.checkAndUpdateLocalization,
+          throwsA(isA<LocalizationDataGettingException>()),
+        );
+        verify(() => remoteLocalizationDatasource.getVersion()).called(1);
+        verify(() => localLocalizationDatasource.getVersion()).called(1);
+        verifyNever(() => localLocalizationDatasource.setData(any(), any()));
+        verifyNever(() => remoteLocalizationDatasource.getData());
+        verify(() => localLocalizationDatasource.getData()).called(1);
       });
     });
   });

@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_libphonenumber/flutter_libphonenumber.dart' as phone;
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:kap/app/modules/my_app.dart';
 import 'package:kap/config/environment.dart';
 import 'package:kap/datasource/authorization/firebase_authorization_datasource.dart';
@@ -64,6 +65,7 @@ Future<void> _initServices({required Environment env}) async {
     LocalizationRepository(
       localLocalizationDatasource: const HiveLocalizationDatasource(),
       remoteLocalizationDatasource: FirebaseLocalizationDatasource(firebaseDatabase: FirebaseDatabase.instance),
+      internetConnectionChecker: InternetConnectionChecker(),
     ),
   );
   LaunchTrackerService.to.stopService('LocalizationService');
