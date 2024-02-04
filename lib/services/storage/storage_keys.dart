@@ -12,3 +12,9 @@ abstract class StorageKeys {
   static const String theme = 'theme';
   static const String isLogged = 'logged';
 }
+
+abstract class StorageBoxNames {
+  const StorageBoxNames._();
+
+  static const String settings = 'settings';
+}

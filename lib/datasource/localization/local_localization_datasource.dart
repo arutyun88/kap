@@ -6,4 +6,6 @@ abstract interface class LocalLocalizationDatasource implements LocalizationData
   Future<Locale?> getCurrentLocale();
 
   Future<void> setCurrentLocale(Locale? locale);
+
+  Future<void> setData(Map<String, dynamic> data, int version);
 }
