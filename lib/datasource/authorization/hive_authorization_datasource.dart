@@ -6,7 +6,7 @@ class HiveAuthorizationDatasource implements LocalAuthorizationDatasource {
   @override
   Future<bool> checkIsAuthorized() async {
     try {
-      final box = await Hive.openBox(StorageKeys.settings);
+      final box = await Hive.openBox(StorageBoxNames.settings);
       final data = await box.get(StorageKeys.isLogged);
       return data;
     } on TypeError {
@@ -18,7 +18,7 @@ class HiveAuthorizationDatasource implements LocalAuthorizationDatasource {
 
   @override
   Future<void> updateAuthorizedState(bool state) async {
-    final box = await Hive.openBox(StorageKeys.settings);
+    final box = await Hive.openBox(StorageBoxNames.settings);
     await box.put(StorageKeys.isLogged, state);
   }
 }

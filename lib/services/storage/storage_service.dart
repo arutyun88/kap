@@ -10,13 +10,14 @@ class StorageService extends GetxService {
 
   static Future<void> init() async {
     Hive.init(EnvironmentService.to.documentsDirectory.path);
-    final box = await Hive.openBox(StorageKeys.settings);
+    final box = await Hive.openBox(StorageBoxNames.settings);
     Get.lazyPut(() => StorageService._(box));
   }
 
-  Future<void> set(String key, dynamic value) async => await (await Hive.openBox(StorageKeys.settings)).put(key, value);
+  Future<void> set(String key, dynamic value) async =>
+      await (await Hive.openBox(StorageBoxNames.settings)).put(key, value);
 
-  Future<void> get(String key, dynamic value) async => await (await Hive.openBox(StorageKeys.settings)).get(key);
+  Future<void> get(String key, dynamic value) async => await (await Hive.openBox(StorageBoxNames.settings)).get(key);
 
   final Box box;
 }

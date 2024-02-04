@@ -1,7 +1,6 @@
 abstract class StorageKeys {
   const StorageKeys._();
 
-  static const String settings = 'settings';
   static const String version = 'version';
   static const String data = 'data';
   static const String localizations = 'localizations';

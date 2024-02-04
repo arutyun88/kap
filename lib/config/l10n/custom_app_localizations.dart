@@ -30,7 +30,10 @@ class CustomAppLocalizations extends AppLocalizations {
     return Localizations.of<CustomAppLocalizations>(context, CustomAppLocalizations);
   }
 
-  static final List<Locale> supportedLocales = LocalizationService.to.localization.keys.map((e) => e.locale).toList();
+  static final _localization = LocalizationService.to.localization;
+
+  static final List<Locale> supportedLocales =
+      _localization.isNotEmpty ? _localization.keys.map((e) => e.locale).toList() : AppLocalizations.supportedLocales;
 
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
     AppLocalizationsCustomDelegate(),
@@ -41,69 +44,67 @@ class CustomAppLocalizations extends AppLocalizations {
 
   final Locale _locale;
 
-  final _localizedStrings = LocalizationService.to.localization;
-
   AppLocalizations get _default => lookupAppLocalizations(AppLocalizations.supportedLocales.first);
 
   String get _cLocale => _locale.canonized;
 
   @override
   String helloWithUsername(String username) {
-    final message = _localizedStrings[_cLocale]?['helloWithUsername'];
+    final message = _localization[_cLocale]?['helloWithUsername'];
     if (message == null) return _default.helloWithUsername(username);
     return message.replaceFirst(RegExp(_regex), username);
   }
 
   @override
-  String get language => _localizedStrings[_cLocale]?['language'] ?? _default.language;
+  String get language => _localization[_cLocale]?['language'] ?? _default.language;
 
   @override
-  String get feed => _localizedStrings[_cLocale]?['feed'] ?? _default.feed;
+  String get feed => _localization[_cLocale]?['feed'] ?? _default.feed;
 
   @override
-  String get authorizationTitle => _localizedStrings[_cLocale]?['authorizationTitle'] ?? _default.authorizationTitle;
+  String get authorizationTitle => _localization[_cLocale]?['authorizationTitle'] ?? _default.authorizationTitle;
 
   @override
-  String get messages => _localizedStrings[_cLocale]?['messages'] ?? _default.messages;
+  String get messages => _localization[_cLocale]?['messages'] ?? _default.messages;
 
   @override
-  String get profile => _localizedStrings[_cLocale]?['profile'] ?? _default.profile;
+  String get profile => _localization[_cLocale]?['profile'] ?? _default.profile;
 
   @override
-  String get settings => _localizedStrings[_cLocale]?['settings'] ?? _default.settings;
+  String get settings => _localization[_cLocale]?['settings'] ?? _default.settings;
 
   @override
   String get authorizationDescription =>
-      _localizedStrings[_cLocale]?['authorizationDescription'] ?? _default.authorizationDescription;
+      _localization[_cLocale]?['authorizationDescription'] ?? _default.authorizationDescription;
 
   @override
-  String get continueButton => _localizedStrings[_cLocale]?['continueButton'] ?? _default.continueButton;
+  String get continueButton => _localization[_cLocale]?['continueButton'] ?? _default.continueButton;
 
   @override
-  String get authorizationHint => _localizedStrings[_cLocale]?['authorizationHint'] ?? _default.authorizationHint;
+  String get authorizationHint => _localization[_cLocale]?['authorizationHint'] ?? _default.authorizationHint;
 
   @override
-  String get authorizationNeed => _localizedStrings[_cLocale]?['authorizationNeed'] ?? _default.authorizationNeed;
+  String get authorizationNeed => _localization[_cLocale]?['authorizationNeed'] ?? _default.authorizationNeed;
 
   @override
-  String get authorizationCode => _localizedStrings[_cLocale]?['authorizationCode'] ?? _default.authorizationCode;
+  String get authorizationCode => _localization[_cLocale]?['authorizationCode'] ?? _default.authorizationCode;
 
   @override
-  String get sessionExpired => _localizedStrings[_cLocale]?['sessionExpired'] ?? _default.sessionExpired;
+  String get sessionExpired => _localization[_cLocale]?['sessionExpired'] ?? _default.sessionExpired;
 
   @override
   String get verificationCodeInvalid =>
-      _localizedStrings[_cLocale]?['verificationCodeInvalid'] ?? _default.verificationCodeInvalid;
+      _localization[_cLocale]?['verificationCodeInvalid'] ?? _default.verificationCodeInvalid;
 
   @override
-  String get cancelButtonTitle => _localizedStrings[_cLocale]?['cancelButtonTitle'] ?? _default.cancelButtonTitle;
+  String get cancelButtonTitle => _localization[_cLocale]?['cancelButtonTitle'] ?? _default.cancelButtonTitle;
 
   @override
-  String get continueButtonTitle => _localizedStrings[_cLocale]?['continueButtonTitle'] ?? _default.continueButtonTitle;
+  String get continueButtonTitle => _localization[_cLocale]?['continueButtonTitle'] ?? _default.continueButtonTitle;
 
   @override
   String get registrationIncompleteExitPrompt =>
-      _localizedStrings[_cLocale]?['registrationIncompleteExitPrompt']?.multiline ??
+      _localization[_cLocale]?['registrationIncompleteExitPrompt']?.multiline ??
       _default.registrationIncompleteExitPrompt;
 }
 

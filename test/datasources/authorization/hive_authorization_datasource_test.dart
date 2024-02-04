@@ -20,25 +20,25 @@ main() {
 
   tearDownAll(() async => await tearDownTestHive());
 
-  tearDown(() async => (await Hive.openBox(StorageKeys.settings)).clear());
+  tearDown(() async => (await Hive.openBox(StorageBoxNames.settings)).clear());
 
   group('checkIsAuthorized tests', () {
     test('when user is logged', () async {
-      (await Hive.openBox(StorageKeys.settings)).put(StorageKeys.isLogged, true);
+      (await Hive.openBox(StorageBoxNames.settings)).put(StorageKeys.isLogged, true);
 
       final actual = await hiveLocalizationDatasource.checkIsAuthorized();
       expect(actual, true);
     });
 
     test('when user is not logged', () async {
-      (await Hive.openBox(StorageKeys.settings)).put(StorageKeys.isLogged, false);
+      (await Hive.openBox(StorageBoxNames.settings)).put(StorageKeys.isLogged, false);
 
       final actual = await hiveLocalizationDatasource.checkIsAuthorized();
       expect(actual, false);
     });
 
     test('when catch type error', () async {
-      (await Hive.openBox(StorageKeys.settings)).put(StorageKeys.isLogged, null);
+      (await Hive.openBox(StorageBoxNames.settings)).put(StorageKeys.isLogged, null);
 
       final actual = await hiveLocalizationDatasource.checkIsAuthorized();
       expect(actual, false);
@@ -49,13 +49,13 @@ main() {
     test('when set state authorized', () async {
       await hiveLocalizationDatasource.updateAuthorizedState(true);
 
-      expect((await Hive.openBox(StorageKeys.settings)).get(StorageKeys.isLogged), true);
+      expect((await Hive.openBox(StorageBoxNames.settings)).get(StorageKeys.isLogged), true);
     });
 
     test('when set state not authorized', () async {
       await hiveLocalizationDatasource.updateAuthorizedState(false);
 
-      expect((await Hive.openBox(StorageKeys.settings)).get(StorageKeys.isLogged), false);
+      expect((await Hive.openBox(StorageBoxNames.settings)).get(StorageKeys.isLogged), false);
     });
   });
 }
