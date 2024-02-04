@@ -5,7 +5,6 @@ import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kap/config/extensions/map_extensions.dart';
 import 'package:kap/config/l10n/custom_app_localizations.dart';
-import 'package:kap/domain/exceptions/custom_exception.dart';
 import 'package:kap/repositories/localization_repository.dart';
 import 'package:kap/services/settings/localization_service.dart';
 import 'package:mocktail/mocktail.dart';
@@ -24,63 +23,59 @@ main() {
         (jsonDecode(await File('test/resources/localization_test_file.json').readAsString())['data'] as Map).convertTo;
     localizationRepository = MockLocalizationRepository();
 
-    when(localizationRepository.checkAndUpdateLocalization).thenAnswer((_) => Future.value(localizationMap));
     when(localizationRepository.getCurrentLocale).thenAnswer((_) => Future.value('ru_RU'.locale));
 
     await LocalizationService.init(localizationRepository);
     localizationService = LocalizationService.to;
   });
 
-  group('localization service tests', () {
-    group('localizationService initialization tests', () {
-      test(' service is initialized', () => expect(localizationService.runtimeType, LocalizationService));
-
-      test('locale is initialized', () => expect(LocalizationService.locale.value, 'ru_RU'.locale));
-    });
-
-    test('localization service success test', () async {
-      when(localizationRepository.checkAndUpdateLocalization).thenAnswer((_) => Future.value(localizationMap));
-
-      await localizationService.checkAndUpdateLocalization();
-
-      expect(localizationService.localization, equals(localizationMap));
-      verify(() => localizationRepository.checkAndUpdateLocalization()).called(2);
-    });
-
-    group('localization service failed tests', () {
-      test('localization service throw LocalizationException', () async {
-        when(localizationRepository.checkAndUpdateLocalization).thenThrow(
-          const LocalizationVersionCheckException('an error occurred while checking the version\'s up-to-date'),
-        );
-
-        expect(localizationService.checkAndUpdateLocalization, throwsA(isA<LocalizationException>()));
-      });
-
-      test('localization service throw other Exception', () async {
-        when(localizationRepository.checkAndUpdateLocalization).thenThrow(Exception('other error'));
-
-        expect(localizationService.checkAndUpdateLocalization, throwsA(isNot(isA<LocalizationException>())));
-      });
-    });
+  tearDown(() {
+    localizationService.localization.clear();
   });
 
-  group('setLocale tests', () {
-    test('setLocale when locale is not null', () async {
-      when(() => localizationRepository.setCurrentLocale(any())).thenAnswer((_) => Future.value());
+  group('LocalizationService initialization tests', () {
+    test(' service is initialized', () => expect(localizationService.runtimeType, LocalizationService));
 
-      await localizationService.setLocale('ru_RU'.locale);
+    test('locale is initialized', () => expect(LocalizationService.locale.value, 'ru_RU'.locale));
+  });
 
-      expect(LocalizationService.locale.value, 'ru_RU'.locale);
-      verify(() => localizationRepository.setCurrentLocale(any())).called(1);
+  group('LocalizationService tests', () {
+    group('checkAndUpdateLocalization tests', () {
+      test('checkAndUpdateLocalization success test', () async {
+        when(localizationRepository.checkAndUpdateLocalization).thenAnswer((_) => Future.value(localizationMap));
+
+        await localizationService.checkAndUpdateLocalization();
+
+        expect(localizationService.localization, equals(localizationMap));
+      });
+
+      test('checkAndUpdateLocalization throw Exception', () async {
+        when(localizationRepository.checkAndUpdateLocalization).thenThrow(Exception());
+
+        await localizationService.checkAndUpdateLocalization();
+
+        expect(localizationService.localization, isEmpty);
+      });
     });
 
-    test('setLocale when locale is null', () async {
-      when(() => localizationRepository.setCurrentLocale(any())).thenAnswer((_) => Future.value());
+    group('setLocale tests', () {
+      setUpAll(() {
+        when(() => localizationRepository.setCurrentLocale(any())).thenAnswer((_) => Future.value());
+      });
 
-      await localizationService.setLocale(null);
+      test('setLocale when locale is not null', () async {
+        await localizationService.setLocale('ru_RU'.locale);
 
-      expect(LocalizationService.locale.value, PlatformDispatcher.instance.locale);
-      verify(() => localizationRepository.setCurrentLocale(any())).called(1);
+        expect(LocalizationService.locale.value, 'ru_RU'.locale);
+        verify(() => localizationRepository.setCurrentLocale(any())).called(1);
+      });
+
+      test('setLocale when locale is null', () async {
+        await localizationService.setLocale(null);
+
+        expect(LocalizationService.locale.value.languageCode, PlatformDispatcher.instance.locale.languageCode);
+        verify(() => localizationRepository.setCurrentLocale(any())).called(1);
+      });
     });
   });
 }

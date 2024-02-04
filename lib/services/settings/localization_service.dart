@@ -1,10 +1,8 @@
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:kap/config/l10n/custom_app_localizations.dart';
-import 'package:kap/domain/exceptions/custom_exception.dart';
 import 'package:kap/repositories/localization_repository.dart';
 
 class LocalizationService extends GetxService {
@@ -31,12 +29,8 @@ class LocalizationService extends GetxService {
   Future<void> checkAndUpdateLocalization() async {
     try {
       localization.value = await _localizationRepository.checkAndUpdateLocalization();
-    } on LocalizationException catch (e) {
-      log('${e.runtimeType}: ${e.message}');
-      rethrow;
-    } on Exception catch (e) {
-      log('${e.runtimeType}: e');
-      rethrow;
+    } catch (_) {
+      return;
     }
   }
 
